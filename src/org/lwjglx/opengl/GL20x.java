@@ -52,12 +52,9 @@ public class GL20x {
 	}
 	
 	public static void glShaderSource(int shader, java.nio.ByteBuffer string) {
-		PointerBuffer strings = BufferUtils.createPointerBuffer(1);
-		IntBuffer lengths = BufferUtils.createIntBuffer(1);
-		
-		strings.put(0, string);
-		lengths.put(0, new String(string.array()).length());//source.length());
-		org.lwjgl.opengl.GL20.glShaderSource(shader, strings, lengths);
+		byte[] b = new byte[string.remaining()];
+		string.get(b);
+		org.lwjgl.opengl.GL20.glShaderSource(shader, new String(b));
 	}
 
 }
