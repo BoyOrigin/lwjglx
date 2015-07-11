@@ -31,10 +31,6 @@
  */
 package org.lwjglx.util.glu;
 
-import java.nio.IntBuffer;
-
-import org.lwjgl.BufferUtils;
-
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
 
@@ -48,11 +44,6 @@ import static org.lwjgl.opengl.GL12.*;
  */
 public class Util {
 	
-	/**
-	 * temp IntBuffer of one for getting an int from some GL functions
-	 */
-	private static IntBuffer scratch = BufferUtils.createIntBuffer(16);
-
 	/**
 	 * Return ceiling of integer division
 	 *
@@ -229,19 +220,6 @@ public class Util {
 		}
 
 		return n * m;
-	}
-
-	/**
-	 * Convenience method for returning an int, rather than getting it out of a buffer yourself.
-	 *
-	 * @param what
-	 *
-	 * @return int
-	 */
-	protected static int glGetIntegerv(int what) {
-		scratch.rewind();
-		glGetInteger(what, scratch);
-		return scratch.get();
 	}
 
 }

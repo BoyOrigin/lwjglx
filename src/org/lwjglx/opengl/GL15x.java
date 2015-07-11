@@ -2,19 +2,15 @@ package org.lwjglx.opengl;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL15;
+import org.lwjgl.system.MemoryUtil;
 
 public class GL15x {
 	
 	public static ByteBuffer glGetBufferPointer(int target, int pname) {
 		int size = GL15.glGetBufferParameteri(target, GL15.GL_BUFFER_SIZE);
-		
-		PointerBuffer pb = BufferUtils.createPointerBuffer(1);
-		GL15.glGetBufferPointer(target, pname, pb);
-		
-		return pb.getByteBuffer(0, size);
+		long res = GL15.glGetBufferPointer(target, pname);
+		return MemoryUtil.memByteBuffer(res, size);
 	}
 
 }

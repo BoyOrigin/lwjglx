@@ -60,14 +60,14 @@ class PixelStoreState extends Util {
 	}
 
 	public void load() {
-		unpackRowLength = glGetIntegerv(GL_UNPACK_ROW_LENGTH);
-		unpackAlignment = glGetIntegerv(GL_UNPACK_ALIGNMENT);
-		unpackSkipRows = glGetIntegerv(GL_UNPACK_SKIP_ROWS);
-		unpackSkipPixels = glGetIntegerv(GL_UNPACK_SKIP_PIXELS);
-		packRowLength = glGetIntegerv(GL_PACK_ROW_LENGTH);
-		packAlignment = glGetIntegerv(GL_PACK_ALIGNMENT);
-		packSkipRows = glGetIntegerv(GL_PACK_SKIP_ROWS);
-		packSkipPixels = glGetIntegerv(GL_PACK_SKIP_PIXELS);
+		unpackRowLength = glGetInteger(GL_UNPACK_ROW_LENGTH);
+		unpackAlignment = glGetInteger(GL_UNPACK_ALIGNMENT);
+		unpackSkipRows = glGetInteger(GL_UNPACK_SKIP_ROWS);
+		unpackSkipPixels = glGetInteger(GL_UNPACK_SKIP_PIXELS);
+		packRowLength = glGetInteger(GL_PACK_ROW_LENGTH);
+		packAlignment = glGetInteger(GL_PACK_ALIGNMENT);
+		packSkipRows = glGetInteger(GL_PACK_SKIP_ROWS);
+		packSkipPixels = glGetInteger(GL_PACK_SKIP_PIXELS);
 	}
 
 	public void save() {

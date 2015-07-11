@@ -68,7 +68,7 @@ public class MipMap extends Util {
 		if ( bpp == 0 )
 			return GLU_INVALID_ENUM;
 
-		final int maxSize = glGetIntegerv(GL_MAX_TEXTURE_SIZE);
+		final int maxSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
 
 		int w = nearestPower(width);
 		if ( w > maxSize )
