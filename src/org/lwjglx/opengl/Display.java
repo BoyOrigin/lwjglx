@@ -142,6 +142,13 @@ public class Display {
 			}
 		};
 		
+		Window.cursorEnterCallback = new GLFWCursorEnterCallback() {
+			@Override
+			public void invoke(long window, int entered) {
+				Mouse.setMouseInsideWindow(entered == GL11.GL_TRUE);
+			}
+		};
+		
 		Window.cursorPosCallback = new GLFWCursorPosCallback() {
 			@Override
 			public void invoke(long window, double xpos, double ypos) {
@@ -463,6 +470,7 @@ public class Display {
 		
 		static GLFWKeyCallback keyCallback;
 		static GLFWCharCallback charCallback;
+		static GLFWCursorEnterCallback cursorEnterCallback;
 		static GLFWCursorPosCallback cursorPosCallback;
 		static GLFWMouseButtonCallback mouseButtonCallback;
 		static GLFWWindowFocusCallback windowFocusCallback;
@@ -475,6 +483,7 @@ public class Display {
 		public static void setCallbacks() {
 			glfwSetCallback(handle, keyCallback);
 			glfwSetCallback(handle, charCallback);
+			glfwSetCallback(handle, cursorEnterCallback);
 			glfwSetCallback(handle, cursorPosCallback);
 			glfwSetCallback(handle, mouseButtonCallback);
 			glfwSetCallback(handle, windowFocusCallback);
@@ -488,6 +497,7 @@ public class Display {
 		public static void releaseCallbacks() {
 			keyCallback.release();
 			charCallback.release();
+			cursorEnterCallback.release();
 			cursorPosCallback.release();
 			mouseButtonCallback.release();
 			windowFocusCallback.release();

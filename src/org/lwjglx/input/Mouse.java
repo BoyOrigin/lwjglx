@@ -30,6 +30,8 @@ public class Mouse {
 	
 	private static boolean clipPostionToDisplay = true;
 	
+	private static boolean isMouseInsideWindow = true;
+	
 	public static void addMoveEvent(double mouseX, double mouseY) {
 		latestX = (int)mouseX;
 		latestY = Display.getHeight() - (int)mouseY;
@@ -61,6 +63,10 @@ public class Mouse {
 		nanoTimeEvents[queue.getNextPos()] = Sys.getNanoTime();
 		
 		queue.add();
+	}
+	
+	public static void setMouseInsideWindow(boolean mouseInsideWindow) {
+		isMouseInsideWindow = mouseInsideWindow;
 	}
 	
 	public static void poll() {
@@ -160,6 +166,10 @@ public class Mouse {
 	
 	public static int getButtonCount() {
 		return 8; // max mouse buttons supported by GLFW
+	}
+	
+	public static boolean isInsideWindow() {
+		return isMouseInsideWindow;
 	}
 	
 	public static void setClipMouseCoordinatesToWindow(boolean clip) {
