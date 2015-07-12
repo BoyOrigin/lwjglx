@@ -33,6 +33,7 @@ class EventQueue {
 	 */
 	boolean next() {
 		if (currentEventPos == nextEventPos-1) return false;
+		if (nextEventPos == 0 && currentEventPos == maxEvents - 1) return false;
 		
 		currentEventPos++; // increment current event position
 		if (currentEventPos == maxEvents) currentEventPos = 0; // wrap current event position
