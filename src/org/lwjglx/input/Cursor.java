@@ -129,7 +129,6 @@ public class Cursor {
 	 * @return the minimum size of a native cursor
 	 */
 	public static int getMinCursorSize() {
-		// TODO
 		return 1;
 	}
 
@@ -141,8 +140,7 @@ public class Cursor {
 	 * @return the maximum size of a native cursor
 	 */
 	public static int getMaxCursorSize() {
-		// TODO
-		return 128;
+		return 512;
 	}
 
 	/**
