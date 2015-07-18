@@ -19,9 +19,12 @@ public class Mouse {
 	private static int x = 0;
 	private static int y = 0;
 	
+	private static int lastDWheel = 0;
+	
 	private static EventQueue queue = new EventQueue(32);
 	
 	private static int[] buttonEvents = new int[queue.getMaxEvents()];
+	private static int[] wheelEvents = new int[queue.getMaxEvents()];
 	private static boolean[] buttonEventStates = new boolean[queue.getMaxEvents()];
 	private static int[] xEvents = new int[queue.getMaxEvents()];
 	private static int[] yEvents = new int[queue.getMaxEvents()];
@@ -46,6 +49,8 @@ public class Mouse {
 		buttonEvents[queue.getNextPos()] = -1;
 		buttonEventStates[queue.getNextPos()] = false;
 		
+		wheelEvents[queue.getNextPos()] = 0;
+		
 		nanoTimeEvents[queue.getNextPos()] = Sys.getNanoTime();
 		
 		queue.add();
@@ -60,6 +65,26 @@ public class Mouse {
 		
 		buttonEvents[queue.getNextPos()] = button;
 		buttonEventStates[queue.getNextPos()] = pressed;
+		
+		wheelEvents[queue.getNextPos()] = 0;
+		
+		nanoTimeEvents[queue.getNextPos()] = Sys.getNanoTime();
+		
+		queue.add();
+	}
+	
+	public static void addWheelEvent(int wheel) {
+		lastxEvents[queue.getNextPos()] = xEvents[queue.getNextPos()];
+		lastyEvents[queue.getNextPos()] = yEvents[queue.getNextPos()];
+		
+		xEvents[queue.getNextPos()] = latestX;
+		yEvents[queue.getNextPos()] = latestY;
+		
+		buttonEvents[queue.getNextPos()] = -1;
+		buttonEventStates[queue.getNextPos()] = false;
+		
+		wheelEvents[queue.getNextPos()] = wheel;
+		lastDWheel = wheel;
 		
 		nanoTimeEvents[queue.getNextPos()] = Sys.getNanoTime();
 		
@@ -141,7 +166,7 @@ public class Mouse {
 	}
 	
 	public static int getEventDWheel() {
-		return 0; // TODO
+		return wheelEvents[queue.getCurrentPos()];
 	}
 		
 	public static int getX() {
@@ -161,8 +186,9 @@ public class Mouse {
 	}
 	
 	public static int getDWheel() {
-		// TODO
-		return 0;
+		int dwheel = lastDWheel;
+		lastDWheel = 0;
+		return dwheel;
 	}
 	
 	public static int getButtonCount() {

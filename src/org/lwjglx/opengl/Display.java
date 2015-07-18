@@ -209,6 +209,13 @@ public class Display {
 			}
 		};
 		
+		Window.scrollCallback = new GLFWScrollCallback() {
+			@Override
+			public void invoke(long window, double xoffset, double yoffset) {
+				Mouse.addWheelEvent((int)(yoffset * 120));
+			}
+		};
+		
 		Window.setCallbacks();
 		
 		displayWidth = mode.getWidth();
@@ -479,6 +486,7 @@ public class Display {
 		static GLFWWindowPosCallback windowPosCallback;
 		static GLFWWindowRefreshCallback windowRefreshCallback;
 		static GLFWFramebufferSizeCallback framebufferSizeCallback;
+		static GLFWScrollCallback scrollCallback;
 		
 		public static void setCallbacks() {
 			glfwSetCallback(handle, keyCallback);
@@ -492,6 +500,7 @@ public class Display {
 			glfwSetCallback(handle, windowPosCallback);
 			glfwSetCallback(handle, windowRefreshCallback);
 			glfwSetCallback(handle, framebufferSizeCallback);
+			glfwSetCallback(handle, scrollCallback);
 		}
 		
 		public static void releaseCallbacks() {
@@ -506,6 +515,7 @@ public class Display {
 			windowPosCallback.release();
 			windowRefreshCallback.release();
 			framebufferSizeCallback.release();
+			scrollCallback.release();
 		}
 	}
 
