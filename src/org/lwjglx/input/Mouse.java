@@ -1,6 +1,7 @@
 package org.lwjglx.input;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.system.MemoryUtil;
 import org.lwjglx.LWJGLException;
 import org.lwjglx.Sys;
 import org.lwjglx.opengl.Display;
@@ -181,9 +182,13 @@ public class Mouse {
 	}
 	
 	public static Cursor setNativeCursor(Cursor cursor) throws LWJGLException {
-		// TODO
-		System.out.println("TODO: Implement Mouse.setNativeCursor(Cursor)");
-		return null;
+		if (cursor == null) {
+			GLFW.glfwSetCursor(Display.getWindow(), MemoryUtil.NULL);
+			return null;
+		}
+		
+		GLFW.glfwSetCursor(Display.getWindow(), cursor.getHandle());
+		return cursor;
 	}
 	
 	public static void destroy() {

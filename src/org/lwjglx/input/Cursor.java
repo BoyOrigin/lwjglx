@@ -31,13 +31,14 @@
  */
 package org.lwjglx.input;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import org.lwjglx.BufferChecks;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWimage;
+import org.lwjgl.system.MemoryUtil;
 import org.lwjglx.BufferUtils;
 import org.lwjglx.LWJGLException;
-import org.lwjglx.LWJGLUtil;
-import org.lwjglx.Sys;
 
 /**
  *
@@ -60,12 +61,12 @@ public class Cursor {
 	public static final int		CURSOR_ANIMATION						= 4;
 
 	/** First element to display */
-	private final CursorElement[] cursors;
+	//private final CursorElement[] cursors;
 
 	/** Index into list of cursors */
-	private int index;
+	//private int index;
 
-	private boolean destroyed;
+	private long cursorHandle;
 
 	/**
 	 * Constructs a new Cursor, with the given parameters. Mouse must have been created before you can create
@@ -83,8 +84,41 @@ public class Cursor {
 	 * @throws LWJGLException if the cursor could not be created for any reason
 	 */
 	public Cursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
-		// TODO
-		cursors = null;
+		
+		if (numImages != 1) {
+			System.out.println("ANIMATED CURSORS NOT YET SUPPORTED IN LWJGLX");
+			return;
+		}
+		
+		ByteBuffer pixels = convertARGBIntBuffertoRGBAByteBuffer(width, height, images);
+		ByteBuffer imageBuffer = GLFWimage.malloc(width, height, pixels);
+		
+		cursorHandle = GLFW.glfwCreateCursor(imageBuffer, xHotspot, yHotspot);
+		
+		if (cursorHandle == MemoryUtil.NULL)
+            throw new RuntimeException("Error creating GLFW cursor");
+	}
+	
+	private static ByteBuffer convertARGBIntBuffertoRGBAByteBuffer(int width, int height, IntBuffer imageBuffer) {
+		ByteBuffer pixels = BufferUtils.createByteBuffer(width*height*4);
+		
+		for (int i = 0; i < imageBuffer.limit(); i++) {
+			int argbColor = imageBuffer.get(i);
+			
+			byte alpha = (byte)(argbColor >>> 24);
+	        byte blue = (byte)(argbColor >>> 16);
+	        byte green = (byte)(argbColor >>> 8);
+	        byte red = (byte)argbColor;
+	        
+	        pixels.put(red);
+	        pixels.put(green);
+	        pixels.put(blue);
+	        pixels.put(alpha);
+		}
+		
+		pixels.flip();
+		
+		return pixels;
 	}
 
 	/**
@@ -92,11 +126,11 @@ public class Cursor {
 	 * The Mouse is created and cursor caps includes at least
 	 * CURSOR_ONE_BIT_TRANSPARANCY.
 	 *
-	 * @return the maximum size of a native cursor
+	 * @return the minimum size of a native cursor
 	 */
 	public static int getMinCursorSize() {
 		// TODO
-		return 0;
+		return 1;
 	}
 
 	/**
@@ -108,7 +142,7 @@ public class Cursor {
 	 */
 	public static int getMaxCursorSize() {
 		// TODO
-		return 0;
+		return 128;
 	}
 
 	/**
@@ -127,17 +161,17 @@ public class Cursor {
 	/**
 	 * Creates the actual cursor, using a platform specific class
 	 */
-	private static CursorElement[] createCursors(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
+	/*private static CursorElement[] createCursors(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
 		// TODO
 		return null;
-	}
+	}*/
 	
 	/**
 	 * Convert an IntBuffer image of ARGB format into ABGR
 	 *
 	 * @param imageBuffer image to convert
 	 */
-	private static void convertARGBtoABGR(IntBuffer imageBuffer) {
+	/*private static void convertARGBtoABGR(IntBuffer imageBuffer) {
 		for (int i = 0; i < imageBuffer.limit(); i++) {
 			int argbColor = imageBuffer.get(i);
 			
@@ -150,7 +184,7 @@ public class Cursor {
 	        
 	        imageBuffer.put(i, abgrColor);
 		}
-	}
+	}*/
 
 	/**
 	 * Flips the images so they're oriented according to opengl
@@ -161,12 +195,12 @@ public class Cursor {
 	 * @param images Source images
 	 * @param images_copy Destination images
 	 */
-	private static void flipImages(int width, int height, int numImages, IntBuffer images, IntBuffer images_copy) {
+	/*private static void flipImages(int width, int height, int numImages, IntBuffer images, IntBuffer images_copy) {
 		for (int i = 0; i < numImages; i++) {
 			int start_index = i*width*height;
 			flipImage(width, height, start_index, images, images_copy);
 		}
-	}
+	}*/
 
 	/**
 	 * @param width Width of image
@@ -175,7 +209,7 @@ public class Cursor {
 	 * @param images Source images
 	 * @param images_copy Destination images
 	 */
-	private static void flipImage(int width, int height, int start_index, IntBuffer images, IntBuffer images_copy) {
+	/*private static void flipImage(int width, int height, int start_index, IntBuffer images, IntBuffer images_copy) {
 		for (int y = 0; y < height>>1; y++) {
 			int index_y_1 = y*width + start_index;
 			int index_y_2 = (height - y - 1)*width + start_index;
@@ -187,20 +221,23 @@ public class Cursor {
 				images_copy.put(index2, temp_pixel);
 			}
 		}
-	}
+	}*/
 
+	long getHandle() {
+		return cursorHandle;
+	}
 	/**
 	 * Gets the native handle associated with the cursor object.
 	 */
-	Object getHandle() {
+	/*Object getHandle() {
 		checkValid();
 		return cursors[index].cursorHandle;
-	}
+	}*/
 
-	private void checkValid() {
+	/*private void checkValid() {
 		if (destroyed)
 			throw new IllegalStateException("The cursor is destroyed");
-	}
+	}*/
 
 	/**
 	 * Destroy the native cursor. If the cursor is current,
@@ -208,45 +245,45 @@ public class Cursor {
 	 * OS cursor)
 	 */
 	public void destroy() {
-		// TODO
+		GLFW.glfwDestroyCursor(cursorHandle);
 	}
 
 	/**
 	 * Sets the timout property to the time it should be changed
 	 */
-	protected void setTimeout() {
+	/*protected void setTimeout() {
 		checkValid();
 		cursors[index].timeout = System.currentTimeMillis() + cursors[index].delay;
-	}
+	}*/
 
 	/**
 	 * Determines whether this cursor has timed out
 	 * @return true if the this cursor has timed out, false if not
 	 */
-	protected boolean hasTimedOut() {
+	/*protected boolean hasTimedOut() {
 		checkValid();
 		return cursors.length > 1 && cursors[index].timeout < System.currentTimeMillis();
-	}
+	}*/
 
 	/**
 	 * Changes to the next cursor
 	 */
-	protected void nextCursor() {
+	/*protected void nextCursor() {
 		checkValid();
 		index = ++index % cursors.length;
-	}
+	}*/
 
 	/**
 	 * A single cursor element, used when animating
 	 */
-	private static class CursorElement {
-		/** Handle to cursor */
+	/*private static class CursorElement {
+		// Handle to cursor
 		final Object cursorHandle;
 
-		/** How long a delay this element should have */
+		// How long a delay this element should have
 		final long delay;
 
-		/** Absolute time this element times out */
+		// Absolute time this element times out
 		long timeout;
 
 		CursorElement(Object cursorHandle, long delay, long timeout) {
@@ -254,5 +291,5 @@ public class Cursor {
 			this.delay = delay;
 			this.timeout = timeout;
 		}
-	}
+	}*/
 }
