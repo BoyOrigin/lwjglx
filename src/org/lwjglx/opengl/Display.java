@@ -12,6 +12,7 @@ import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
 import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
 import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
 import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
+import static org.lwjgl.glfw.GLFW.glfwGetCurrentContext;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
@@ -47,7 +48,7 @@ public class Display {
 	
 	private static String windowTitle = "Game";
 	
-	private static org.lwjgl.opengl.GLContext context;
+	private static org.lwjglx.opengl.GLContext context;
 	
 	private static boolean displayCreated = false;
 	private static boolean displayFocused = false;
@@ -237,7 +238,7 @@ public class Display {
 		displayY = (monitorHeight - mode.getHeight()) / 2;
 
 		glfwMakeContextCurrent(Window.handle);
-		context = org.lwjgl.opengl.GLContext.createFromCurrent();
+		context = org.lwjglx.opengl.GLContext.createFromCurrent();
 		
 		glfwSwapInterval(1);
 		glfwShowWindow(Window.handle);
@@ -257,7 +258,7 @@ public class Display {
 		return displayVisible;
 	}
 	
-	public static org.lwjgl.opengl.GLContext getContext() {
+	public static org.lwjglx.opengl.GLContext getContext() {
 		return context;
 	}
 	
@@ -437,7 +438,7 @@ public class Display {
 	}
 	
 	public static boolean isCurrent() throws LWJGLException {
-		return context.isCurrent();
+		return glfwGetCurrentContext() == Window.handle;
 	}
 	
 	public static void makeCurrent() throws LWJGLException {
