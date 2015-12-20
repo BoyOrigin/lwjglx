@@ -35,7 +35,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWimage;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjglx.BufferUtils;
 import org.lwjglx.LWJGLException;
@@ -94,9 +94,12 @@ public class Cursor {
 		flipImages(width, height, numImages, images, flippedImages);
 		
 		ByteBuffer pixels = convertARGBIntBuffertoRGBAByteBuffer(width, height, flippedImages);
-		ByteBuffer imageBuffer = GLFWimage.malloc(width, height, pixels);
+		GLFWImage cursorImage = GLFWImage.malloc();
+		cursorImage.width(width);
+		cursorImage.height(height);
+		cursorImage.pixels(pixels);
 		
-		cursorHandle = GLFW.glfwCreateCursor(imageBuffer, xHotspot, height - yHotspot - 1);
+		cursorHandle = GLFW.glfwCreateCursor(cursorImage, xHotspot, height - yHotspot - 1);
 		
 		if (cursorHandle == MemoryUtil.NULL)
             throw new RuntimeException("Error creating GLFW cursor");

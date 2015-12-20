@@ -37,7 +37,7 @@ public class AL {
 			attribs.put(0);
 			attribs.flip();
 			
-			long contextHandle = org.lwjgl.openal.ALC10.alcCreateContext(alDevice.getPointer(), attribs);
+			long contextHandle = org.lwjgl.openal.ALC10.alcCreateContext(alDevice.address(), attribs);
 			
 			alContext = new ALContext(alDevice, contextHandle);
 			
@@ -52,7 +52,7 @@ public class AL {
 	}
 	
 	public static void destroy() {
-		org.lwjgl.openal.AL.destroy(alContext);
+		alContext.destroy();
 		alContext = null;
 		alcDevice = null;
 		created = false;
