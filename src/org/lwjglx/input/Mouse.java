@@ -36,6 +36,8 @@ public class Mouse {
 	
 	private static boolean isMouseInsideWindow = true;
 	
+	private static Cursor currentCursor = null;
+	
 	public static void addMoveEvent(double mouseX, double mouseY) {
 		latestX = (int)mouseX;
 		latestY = Display.getHeight() - (int)mouseY;
@@ -214,7 +216,12 @@ public class Mouse {
 		}
 		
 		GLFW.glfwSetCursor(Display.getWindow(), cursor.getHandle());
+		currentCursor = cursor;
 		return cursor;
+	}
+	
+	public static Cursor getCurrentCursor() {
+		return currentCursor;
 	}
 	
 	public static void destroy() {

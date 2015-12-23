@@ -206,7 +206,7 @@ public class Cursor {
 		}
 	}
 
-	long getHandle() {
+	public long getHandle() {
 		return cursorHandle;
 	}
 	/**
