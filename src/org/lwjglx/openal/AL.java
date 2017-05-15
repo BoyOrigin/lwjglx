@@ -1,16 +1,18 @@
 package org.lwjglx.openal;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.openal.ALContext;
-import org.lwjgl.openal.ALDevice;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALC10;
+import org.lwjgl.system.MemoryUtil;
 import org.lwjglx.LWJGLException;
 import org.lwjglx.Sys;
 
 public class AL {
 	
-	static ALContext alContext;
+	static long alContext;
 	static ALCdevice alcDevice;
 	
 	private static boolean created = false;
@@ -20,8 +22,12 @@ public class AL {
 	}
 	
 	public static void create() throws LWJGLException {
-		if (alContext == null) {
-			ALDevice alDevice = ALDevice.create();
+		if (alContext == MemoryUtil.NULL) {
+			//ALDevice alDevice = ALDevice.create();
+			long alDevice = ALC10.alcOpenDevice((ByteBuffer)null);
+			if(alDevice == MemoryUtil.NULL){
+				throw new LWJGLException("Cannot open the device");
+			}
 			
 			IntBuffer attribs = BufferUtils.createIntBuffer(16);
 
@@ -37,10 +43,9 @@ public class AL {
 			attribs.put(0);
 			attribs.flip();
 			
-			long contextHandle = org.lwjgl.openal.ALC10.alcCreateContext(alDevice.address(), attribs);
-			
-			alContext = new ALContext(alDevice, contextHandle);
-			
+			long contextHandle = org.lwjgl.openal.ALC10.alcCreateContext(alDevice, attribs);
+			//alContext = new ALContext(alDevice, contextHandle);
+			alContext = ALC10.alcCreateContext(contextHandle, (IntBuffer)null);
 			alcDevice = new ALCdevice(contextHandle);
 			
 			created = true;
@@ -52,8 +57,8 @@ public class AL {
 	}
 	
 	public static void destroy() {
-		alContext.destroy();
-		alContext = null;
+		//alContext.destroy();
+		alContext = -1;
 		alcDevice = null;
 		created = false;
 	}

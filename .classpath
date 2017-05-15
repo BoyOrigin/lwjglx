@@ -2,11 +2,18 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="lib/lwjgl.jar">
+	<classpathentry exported="true" kind="lib" path="lib/lwjgl.jar" sourcepath="lib/lwjgl-sources.jar">
 		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/lwjglx/lib/lwjgl-javadoc.jar!/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="lwjglx/lib/native"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/res.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/lwjgl-glfw.jar" sourcepath="lib/lwjgl-glfw-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/lwjglx/lib/lwjgl-glfw-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/lwjgl-opengl.jar" sourcepath="lib/lwjgl-opengl-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/lwjgl-openal.jar" sourcepath="lib/lwjgl-openal-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

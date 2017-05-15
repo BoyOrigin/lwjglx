@@ -8,6 +8,7 @@ import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.EXTEfx.*;
 
 import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALCCapabilities;
 
 /**
  * Utility class for the OpenAL extension AL_EXT_EFX. Provides functions to check for the extension
@@ -37,7 +38,8 @@ public final class EFXUtil {
 	 *          If OpenAL has not been created yet.
 	 */
 	public static boolean isEfxSupported() {
-		return ALC.getCapabilities().ALC_EXT_EFX;
+		//return ALC.getCapabilities().ALC_EXT_EFX;
+		return ALC.createCapabilities(AL.alcDevice.device).ALC_EXT_EFX;
 	}
 
 	/**

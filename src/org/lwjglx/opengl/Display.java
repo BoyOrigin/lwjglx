@@ -120,8 +120,8 @@ public class Display {
 		
 		Window.cursorEnterCallback = new GLFWCursorEnterCallback() {
 			@Override
-			public void invoke(long window, int entered) {
-				Mouse.setMouseInsideWindow(entered == GL11.GL_TRUE);
+			public void invoke(long window, boolean entered) {
+				Mouse.setMouseInsideWindow(entered == true);
 			}
 		};
 		
@@ -141,15 +141,15 @@ public class Display {
 		
 		Window.windowFocusCallback = new GLFWWindowFocusCallback() {
 			@Override
-			public void invoke(long window, int focused) {
-				displayFocused = focused == GL11.GL_TRUE;
+			public void invoke(long window, boolean focused) {
+				displayFocused = focused == true;
 			}
 		};
 		
 		Window.windowIconifyCallback = new GLFWWindowIconifyCallback() {
 			@Override
-			public void invoke(long window, int iconified) {
-				displayVisible = iconified == GL11.GL_FALSE;
+			public void invoke(long window, boolean iconified) {
+				displayVisible = iconified == false;
 			}
 		};
 		
@@ -364,7 +364,7 @@ public class Display {
 	}
 	
 	public static boolean isCloseRequested() {
-		return glfwWindowShouldClose(Window.handle) == GL_TRUE;
+		return glfwWindowShouldClose(Window.handle) == true;
 	}
 	
 	public static boolean isDirty() {
@@ -533,18 +533,19 @@ public class Display {
 		}
 		
 		public static void releaseCallbacks() {
-			keyCallback.release();
-			charCallback.release();
-			cursorEnterCallback.release();
-			cursorPosCallback.release();
-			mouseButtonCallback.release();
-			windowFocusCallback.release();
-			windowIconifyCallback.release();
-			windowSizeCallback.release();
-			windowPosCallback.release();
-			windowRefreshCallback.release();
-			framebufferSizeCallback.release();
-			scrollCallback.release();
+			keyCallback = null;
+			charCallback = null;
+			cursorEnterCallback = null;
+			cursorPosCallback = null;
+			mouseButtonCallback = null;
+			windowFocusCallback = null;
+			windowIconifyCallback = null;
+			windowSizeCallback = null;
+			windowPosCallback = null;
+			windowRefreshCallback = null;
+			framebufferSizeCallback = null;
+			scrollCallback = null;
+			System.gc();
 		}
 	}
 

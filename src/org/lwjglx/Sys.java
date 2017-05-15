@@ -14,8 +14,8 @@ import javax.swing.UIManager;
 public class Sys {
 	
 	static {
-		if ( glfwInit() != GL11.GL_TRUE )
-			throw new IllegalStateException("Unable to initialize glfw");
+		if ( glfwInit() != true )
+			throw new IllegalStateException("Unable to initialize GLFW");
 	}
 	
 	public static void initialize() {
@@ -70,8 +70,12 @@ public class Sys {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch(Exception e) {
-			LWJGLUtil.log("Caught exception while setting LAF: " + e);
+			LWJGLUtil.log("Caught exception while setting Look-and-Feel: " + e);
 		}
 		JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
+	}
+	
+	public static String getClipboard(){
+		return GLFW.glfwGetClipboardString(GLFW.glfwGetPrimaryMonitor());
 	}
 }
