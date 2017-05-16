@@ -13,13 +13,13 @@ import javax.swing.UIManager;
 
 public class Sys {
 	
-	static {
-		if ( glfwInit() != true )
-			throw new IllegalStateException("Unable to initialize GLFW");
-	}
+	//static {
+	//	
+	//}
 	
 	public static void initialize() {
-		
+		if ( glfwInit() != true )
+			throw new IllegalStateException("Unable to initialize GLFW");
 	}
 
 	/** Returns the LWJGL version. */

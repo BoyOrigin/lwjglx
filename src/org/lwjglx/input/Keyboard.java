@@ -170,6 +170,9 @@ public class Keyboard {
 	private static long[] nanoTimeEvents = new long[queue.getMaxEvents()];
 	private static char[] keyEventChars = new char[256];
 	
+	private static boolean repeatEvents = false;
+	private static int latestEventKey = 0;
+	
 	public static final int KEYBOARD_SIZE = 256;
 	
 	private static final String[] keyName = new String[KEYBOARD_SIZE];
@@ -199,16 +202,21 @@ public class Keyboard {
 
 	}
 	
-	public static void addKeyEvent(int key, boolean pressed) {
+	public static void addKeyEvent(int key, int status) {
 		//eventCount++;
 		//if (eventCount > maxEvents) eventCount = maxEvents;
 		
-		keyEvents[queue.getNextPos()] = KeyCodes.toLwjglKey(key);
-		keyEventStates[queue.getNextPos()] = pressed;
-		
-		nanoTimeEvents[queue.getNextPos()] = Sys.getNanoTime();
-		
-		queue.add();
+		switch(status){
+		case GLFW.GLFW_REPEAT: if(!repeatEvents)break;
+		case GLFW.GLFW_RELEASE:
+		case GLFW.GLFW_PRESS:
+			keyEvents[queue.getNextPos()] = KeyCodes.toLwjglKey(key);
+			keyEventStates[queue.getNextPos()] = status == GLFW.GLFW_PRESS || status == GLFW.GLFW_REPEAT;
+			
+			nanoTimeEvents[queue.getNextPos()] = Sys.getNanoTime();
+			
+			queue.add();
+		}
 		/*nextEventPos++;
 		if (nextEventPos == maxEvents) nextEventPos = 0;
 		
@@ -226,7 +234,10 @@ public class Keyboard {
 	}
             
 	public static boolean isKeyDown(int key) {
-		return GLFW.glfwGetKey(Display.getWindow(), KeyCodes.toGlfwKey(key)) == GLFW.GLFW_PRESS;
+		int k = GLFW.glfwGetKey(Display.getWindow(), KeyCodes.toGlfwKey(key));
+		
+		return k == GLFW.GLFW_PRESS
+				|| k == GLFW.GLFW_REPEAT;
 	}
 	
 	public static void poll() {
@@ -235,12 +246,13 @@ public class Keyboard {
 	
 	public static void enableRepeatEvents(boolean enable) {
 		// TODO
-		System.out.println("TODO: Implement Keyboad.enableRepeatEvents(boolean)");
+		//System.out.println("TODO: Implement Keyboad.enableRepeatEvents(boolean)");
+		repeatEvents = enable;
 	}
 	
 	public static boolean isRepeatEvent() {
 		// TODO
-		return false;
+		return repeatEvents;
 	}
 	
 	public static boolean next() {

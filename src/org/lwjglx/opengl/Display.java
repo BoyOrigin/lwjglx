@@ -5,6 +5,9 @@ import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.glfw.GLFW.*;
 
+import java.awt.Canvas;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -22,6 +25,8 @@ public class Display {
 	
 	private static org.lwjglx.opengl.GLContext context;
 	
+	private static DisplayImplementation currentImpl;
+	
 	private static boolean displayCreated = false;
 	private static boolean displayFocused = false;
 	private static boolean displayVisible = true;
@@ -33,8 +38,8 @@ public class Display {
 	
 	private static int latestEventKey = 0;
 	
-	private static int displayX = 0;
-	private static int displayY = 0;
+	private static int displayX = -1;
+	private static int displayY = -1;
 	
 	private static boolean displayResized = false;
 	private static int displayWidth = 0;
@@ -65,20 +70,29 @@ public class Display {
 	
 	public static void create(PixelFormat pixel_format, Drawable shared_drawable) throws LWJGLException {
 		System.out.println("TODO: Implement Display.create(PixelFormat, Drawable)"); // TODO
-		create();
+		create(pixel_format);
 	}
 	
 	public static void create(PixelFormat pixel_format, ContextAttribs attribs) throws LWJGLException {
 		System.out.println("TODO: Implement Display.create(PixelFormat, ContextAttribs)"); // TODO
-		create();
+		create(pixel_format);
 	}
 	
-	public static void create(PixelFormat pixel_format) throws LWJGLException {
-		System.out.println("TODO: Implement Display.create(PixelFormat)"); // TODO
+	public static void create(PixelFormat format) throws LWJGLException {
+		glfwWindowHint(GLFW_ACCUM_ALPHA_BITS, format.getAccumulationBitsPerPixel());
+		glfwWindowHint(GLFW_ALPHA_BITS, format.getAlphaBits());
+		glfwWindowHint(GLFW_AUX_BUFFERS, format.getAuxBuffers());
+		glfwWindowHint(GLFW_DEPTH_BITS, format.getDepthBits());
+		glfwWindowHint(GLFW_SAMPLES, format.getSamples());
+		glfwWindowHint(GLFW_STENCIL_BITS, format.getStencilBits());
 		create();
 	}
 	
 	public static void create() throws LWJGLException {
+		if(Window.handle != 0L){
+			glfwDestroyWindow(Window.handle);
+		}
+		
 		long monitor = glfwGetPrimaryMonitor();
 		GLFWVidMode vidmode = glfwGetVideoMode(monitor);
 
@@ -95,9 +109,10 @@ public class Display {
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
 		
+		
 		Window.handle = glfwCreateWindow(mode.getWidth(), mode.getHeight(), windowTitle, NULL, NULL);
 		if ( Window.handle == 0L )
-			throw new IllegalStateException("Failed to create Display window");
+			throw new LWJGLException("Failed to create Display window");
 		
 		
 		Window.keyCallback = new GLFWKeyCallback() {
@@ -105,9 +120,11 @@ public class Display {
 			public void invoke(long window, int key, int scancode, int action, int mods) {
 				latestEventKey = key;
 				
-				if (action == GLFW_RELEASE || action == GLFW.GLFW_PRESS) {
-					Keyboard.addKeyEvent(key, action == GLFW.GLFW_PRESS ? true : false);
-				}
+				//if (action == GLFW_RELEASE || action == GLFW.GLFW_PRESS) {
+				//	Keyboard.addKeyEvent(key, action == GLFW.GLFW_PRESS ? true : false);
+				//}
+
+				Keyboard.addKeyEvent(key, action);
 			}
 		};
 		
@@ -199,7 +216,7 @@ public class Display {
 		
 		IntBuffer fbw = BufferUtils.createIntBuffer(1);
 		IntBuffer fbh = BufferUtils.createIntBuffer(1);
-		GLFW.glfwGetFramebufferSize(Window.handle, fbw, fbh);
+		glfwGetFramebufferSize(Window.handle, fbw, fbh);
 		displayFramebufferWidth = fbw.get(0);
 		displayFramebufferHeight = fbh.get(0);
 		
@@ -209,8 +226,13 @@ public class Display {
 			(monitorHeight - mode.getHeight()) / 2
 		);
 		
-		displayX = (monitorWidth - mode.getWidth()) / 2;
-		displayY = (monitorHeight - mode.getHeight()) / 2;
+		if(displayX == -1){
+			displayX = (monitorWidth - mode.getWidth()) / 2;
+		}
+		
+		if(displayY == -1){
+			displayY = (monitorHeight - mode.getHeight()) / 2;
+		}
 
 		glfwMakeContextCurrent(Window.handle);
 		context = org.lwjglx.opengl.GLContext.createFromCurrent();
@@ -218,7 +240,318 @@ public class Display {
 		glfwSwapInterval(1);
 		glfwShowWindow(Window.handle);
 		
+		currentImpl = new DisplayImplementation() {
+			
+			@Override
+			public void setNativeCursor(Object handle) throws LWJGLException {
+				try{
+					Mouse.setNativeCursor((Cursor)handle);
+				} catch (ClassCastException e) {
+					throw new LWJGLException("Handle is not an instance of cursor");
+				}
+			}
+			
+			@Override
+			public void setCursorPosition(int x, int y) {
+				Mouse.setCursorPosition(x, y);
+			}
+			
+			@Override
+			public void readMouse(ByteBuffer buffer) {
+				
+			}
+			
+			@Override
+			public void readKeyboard(ByteBuffer buffer) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void pollMouse(IntBuffer coord_buffer, ByteBuffer buttons) {
+				
+			}
+			
+			@Override
+			public void pollKeyboard(ByteBuffer keyDownBuffer) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public boolean isInsideWindow() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean hasWheel() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public void grabMouse(boolean grab) {
+				Mouse.setGrabbed(grab);
+			}
+			
+			@Override
+			public int getNativeCursorCapabilities() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public int getMinCursorSize() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public int getMaxCursorSize() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public int getButtonCount() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public void destroyMouse() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void destroyKeyboard() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void destroyCursor(Object cursor_handle) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void createMouse() throws LWJGLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void createKeyboard() throws LWJGLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public Object createCursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images,
+					IntBuffer delays) throws LWJGLException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public boolean wasResized() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public void update() {
+				Display.update();
+			}
+			
+			@Override
+			public void switchDisplayMode(DisplayMode mode) throws LWJGLException {
+				Display.setDisplayMode(mode);
+			}
+			
+			@Override
+			public void setTitle(String title) {
+				windowTitle = title;
+			}
+			
+			@Override
+			public void setResizable(boolean resizable) {
+				Display.setResizable(resizable);
+			}
+			
+			@Override
+			public void setPbufferAttrib(PeerInfo handle, int attrib, int value) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public int setIcon(ByteBuffer[] icons) {
+				// TODO Auto-generated method stub
+				GLFW.glfwSetWindowIcon(Window.handle, new GLFWImage.Buffer(icons[0]));
+				return 0;
+			}
+			
+			@Override
+			public void setGammaRamp(FloatBuffer gammaRamp) throws LWJGLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void reshape(int x, int y, int width, int height) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void resetDisplayMode() {
+				try {
+					Display.setDisplayMode(desktopDisplayMode);
+				} catch (LWJGLException e) {
+				}
+			}
+			
+			@Override
+			public void releaseTexImageFromPbuffer(PeerInfo handle, int buffer) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public boolean isVisible() {
+				// TODO Auto-generated method stub
+				return Display.displayVisible;
+			}
+			
+			@Override
+			public boolean isDirty() {
+				// TODO Auto-generated method stub
+				return Display.displayDirty;
+			}
+			
+			@Override
+			public boolean isCloseRequested() {
+				// TODO Auto-generated method stub
+				return GLFW.glfwWindowShouldClose(Window.handle);
+			}
+			
+			@Override
+			public boolean isBufferLost(PeerInfo handle) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean isActive() {
+				// TODO Auto-generated method stub
+				return Display.displayFocused;
+			}
+			
+			@Override
+			public DisplayMode init() throws LWJGLException {
+				// TODO Auto-generated method stub
+				return desktopDisplayMode;
+			}
+			
+			@Override
+			public int getY() {
+				// TODO Auto-generated method stub
+				return Display.displayY;
+			}
+			
+			@Override
+			public int getX() {
+				// TODO Auto-generated method stub
+				return Display.displayX;
+			}
+			
+			@Override
+			public int getWidth() {
+				// TODO Auto-generated method stub
+				return Display.latestWidth;
+			}
+			
+			@Override
+			public String getVersion() {
+				// TODO Auto-generated method stub
+				return Sys.getVersion();
+			}
+			
+			@Override
+			public float getPixelScaleFactor() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public int getPbufferCapabilities() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public int getHeight() {
+				// TODO Auto-generated method stub
+				return Display.latestHeight;
+			}
+			
+			@Override
+			public int getGammaRampLength() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public DisplayMode[] getAvailableDisplayModes() throws LWJGLException {
+				// TODO Auto-generated method stub
+				return Display.getAvailableDisplayModes();
+			}
+			
+			@Override
+			public String getAdapter() {
+				// TODO Auto-generated method stub
+				return Display.getAdapter();
+			}
+			
+			@Override
+			public void destroyWindow() {
+				Display.destroy();
+			}
+			
+			@Override
+			public void createWindow(DrawableLWJGL drawable, DisplayMode mode, Canvas parent, int x, int y)
+					throws LWJGLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public PeerInfo createPeerInfo(PixelFormat pixel_format, ContextAttribs attribs) throws LWJGLException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public PeerInfo createPbuffer(int width, int height, PixelFormat pixel_format, ContextAttribs attribs,
+					IntBuffer pixelFormatCaps, IntBuffer pBufferAttribs) throws LWJGLException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public void bindTexImageToPbuffer(PeerInfo handle, int buffer) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		
 		displayCreated = true;
+		
+		
 	}
 	
 	public static boolean isCreated() {
@@ -238,7 +571,12 @@ public class Display {
 	}
 	
 	public static void setLocation(int new_x, int new_y) {
-		GLFW.glfwSetWindowPos(Window.handle, new_x, new_y);
+		if(Window.handle == 0L){
+			Display.displayX = new_x;
+			Display.displayY = new_y;
+		}else{
+			GLFW.glfwSetWindowPos(Window.handle, new_x, new_y);
+		}
 	}
 	
 	public static void setVSyncEnabled(boolean sync) {
@@ -256,6 +594,8 @@ public class Display {
 	public static void update(boolean processMessages) {
 		try {
 			swapBuffers();
+			//TODO do we use this?
+			GL11.glFlush();
 			displayDirty = false;
 		}
 		catch (LWJGLException e) {
@@ -289,11 +629,6 @@ public class Display {
 		Window.releaseCallbacks();
 		glfwDestroyWindow(Window.handle);
 		
-		/*try {
-			glfwTerminate();
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}*/
 		displayCreated = false;
 	}
 	
@@ -378,7 +713,7 @@ public class Display {
 	
 	public static int setIcon(java.nio.ByteBuffer[] icons) {
 		// TODO
-		System.out.println("TODO: Implement Display.setIcon(ByteBuffer[])");
+		glfwSetWindowIcon(Window.handle, new GLFWImage.Buffer(icons[0]));
 		return 0;
 	}
 	
@@ -483,7 +818,7 @@ public class Display {
 	}
 	
 	private static void newCurrentWindow(long newWindow) {
-		GLFW.glfwDestroyWindow(Window.handle);
+		glfwDestroyWindow(Window.handle);
 		Window.handle = newWindow;
 		try {
 			Mouse.setNativeCursor(Mouse.getCurrentCursor());
