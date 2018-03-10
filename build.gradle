@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+import org.apache.tools.ant.filters.*
+
+group = 'org.lwjglx'
+version = '0.10'
+buildDir = new File(rootProject.projectDir, "build/")
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+		}
+		resources {
+			srcDir 'src/main/resources'
+		}
+	}
+	test {
+		java {
+			srcDir 'src/test/java'
+		}
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.lwjgl:lwjgl:3.1.5'
+	compile 'org.lwjgl:lwjgl-glfw:3.1.5'
+	compile 'org.lwjgl:lwjgl-openal:3.1.5'
+	compile 'org.lwjgl:lwjgl-opengl:3.1.5'
+}
