@@ -6,8 +6,8 @@ apply plugin: 'application'
 
 import org.apache.tools.ant.filters.*
 
-group = 'org.lwjglx'
-version = '0.10'
+group = 'org.lwjgl'
+version = '0.11'
 buildDir = new File(rootProject.projectDir, "build/")
 
 
