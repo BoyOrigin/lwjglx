@@ -35,8 +35,8 @@ repositories {
 }
 
 dependencies {
-	compile 'org.lwjgl:lwjgl:3.1.5'
-	compile 'org.lwjgl:lwjgl-glfw:3.1.5'
-	compile 'org.lwjgl:lwjgl-openal:3.1.5'
-	compile 'org.lwjgl:lwjgl-opengl:3.1.5'
+	compile 'org.lwjgl:lwjgl:3.2.3'
+	compile 'org.lwjgl:lwjgl-glfw:3.2.3'
+	compile 'org.lwjgl:lwjgl-openal:3.2.3'
+	compile 'org.lwjgl:lwjgl-opengl:3.2.3'
 }
