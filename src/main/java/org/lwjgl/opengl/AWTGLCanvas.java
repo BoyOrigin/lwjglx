@@ -72,7 +72,7 @@ public class AWTGLCanvas extends Canvas implements Drawable, ComponentListener, 
 	}
 
 	public void initContext(final float r, final float g, final float b) {
-		Display.setInitialBackground(r, g, b)
+		Display.setInitialBackground(r, g, b);
 	}
 
 	public AWTGLCanvas() throws LWJGLException {
