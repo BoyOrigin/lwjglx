@@ -5,12 +5,7 @@ import org.lwjgl.opengl.GL11;
 public class GL11x {
 	
 	public static void glColorPointer(int size, boolean unsigned, int stride, java.nio.ByteBuffer pointer) {
-		if (unsigned) {
-			org.lwjgl.opengl.GL11.glColorPointer(size, GL11.GL_UNSIGNED_BYTE, stride, pointer);
-		}
-		else {
-			org.lwjgl.opengl.GL11.glColorPointer(size, GL11.GL_BYTE, stride, pointer);
-		}
+		org.lwjgl.opengl.GL11.glColorPointer(size, unsigned ? GL11.GL_UNSIGNED_BYTE : GL11.GL_BYTE, stride, pointer);
 	}
 	
 	public static void glColorPointer(int size, int stride, java.nio.FloatBuffer pointer) {

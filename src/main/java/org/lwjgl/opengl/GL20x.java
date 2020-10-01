@@ -22,15 +22,13 @@ public class GL20x {
 	public static void glVertexAttribPointer(int index, int size,
 											 boolean unsigned, boolean normalized,
 											 int stride, ShortBuffer buffer) {
-		int type = unsigned ? GL11.GL_UNSIGNED_SHORT : GL11.GL_SHORT;
-		GL20.nglVertexAttribPointer(index, size, type, normalized, stride, MemoryUtil.memAddress(buffer));
+		GL20.nglVertexAttribPointer(index, size, unsigned ? GL11.GL_UNSIGNED_SHORT : GL11.GL_SHORT, normalized, stride, MemoryUtil.memAddress(buffer));
 	}
 	
 	public static void glVertexAttribPointer(int index, int size,
 			 								 boolean unsigned, boolean normalized,
 			 								 int stride, IntBuffer buffer) {
-		int type = unsigned ? GL11.GL_UNSIGNED_INT : GL11.GL_INT;
-		GL20.nglVertexAttribPointer(index, size, type, normalized, stride, MemoryUtil.memAddress(buffer));
+		GL20.nglVertexAttribPointer(index, size, unsigned ? GL11.GL_UNSIGNED_INT : GL11.GL_INT, normalized, stride, MemoryUtil.memAddress(buffer));
 }
 	
 	public static String glGetActiveAttrib(int program, int index, int maxLength,
