@@ -95,6 +95,7 @@ public class Display {
 	}
 
 	public static void create() throws LWJGLException {
+        System.out.println("org.lwjgl.opengl.Display.create() calling");
 		if (Window.handle != MemoryUtil.NULL)
 			glfwDestroyWindow(Window.handle);
 
@@ -708,8 +709,12 @@ public class Display {
 	}
 
 	public static void setInitialBackground(float red, float green, float blue) {
-		// TODO
-		System.out.println("TODO: Implement Display.setInitialBackground(float, float, float)");
+		// System.out.println("TODO: Implement Display.setInitialBackground(float, float, float)");
+        
+        if (Windowmhandle != MemoryUtil.NULL) {
+            GL11.glClearColor(red, green, blue, 1f);
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        }
 	}
 
 	public static int setIcon(java.nio.ByteBuffer[] icons) {
@@ -826,7 +831,8 @@ public class Display {
 	}
 
 	private static void newCurrentWindow(long newWindow) {
-		glfwDestroyWindow(Window.handle);
+        if (Window.handle != MemoryUtil.NULL)
+		    glfwDestroyWindow(Window.handle);
 		Window.handle = newWindow;
 		try {
 			Mouse.setNativeCursor(Mouse.getCurrentCursor());

@@ -34,6 +34,8 @@ package org.lwjgl.opengl;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.PointerBuffer;
 
+import org.lwjgl.glfw.*;
+
 /**
  * <p/>
  * Context encapsulates an OpenGL context.
@@ -46,9 +48,9 @@ import org.lwjgl.PointerBuffer;
  *          $Id$
  */
 final class ContextGL implements Context {
-
+    private boolean isCurrent = false;
 	public void releaseCurrent() throws LWJGLException {
-		
+		isCurrent = false;
 	}
 
 	public synchronized void releaseDrawable() throws LWJGLException {
@@ -56,31 +58,32 @@ final class ContextGL implements Context {
 	}
 
 	public synchronized void update() {
-		
+		Display.update();
 	}
 
 	public static void swapBuffers() throws LWJGLException {
-		
+		Display.swapBuffers();
 	}
 
 	public synchronized void makeCurrent() throws LWJGLException {
-		
+		Display.makeCurrent();
+        isCurrent = true;
 	}
 
 	public synchronized boolean isCurrent() throws LWJGLException {
-		return false;
+		return isCurrent;
 	}
 
 	public static void setSwapInterval(int value) {
-		
+		GLFW.glfwSetSwapInterval(value);
 	}
 
 	public synchronized void forceDestroy() throws LWJGLException {
-		
+		Display.destroy();
 	}
 
 	public synchronized void destroy() throws LWJGLException {
-		
+		Display.destroy();
 	}
 
 	public synchronized void setCLSharingProperties(final PointerBuffer properties) throws LWJGLException {
