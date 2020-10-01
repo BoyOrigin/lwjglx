@@ -127,7 +127,7 @@ public class AWTGLCanvas extends Canvas implements Drawable, ComponentListener, 
 		mContextGL.releaseCurrent();
 	}
 
-	public final void destroy() {
+	public final void destroy() throws LWJGLException {
 		mContextGL.destroy();
 	}
 
