@@ -108,7 +108,7 @@ public class AWTGLCanvas extends Canvas implements Drawable, ComponentListener, 
 	}
 
 	public void setVSyncEnabled(boolean enabled) {
-		mContextGL.setVSyncEnabled(enabled);
+		mContextGL.setSwapInterval(enabled ? 1 : 0);
 	}
 
 	public void swapBuffers() throws LWJGLException {
@@ -124,7 +124,7 @@ public class AWTGLCanvas extends Canvas implements Drawable, ComponentListener, 
 	}
 
 	public void releaseContext() throws LWJGLException {
-		mContextGL.releaseContext();
+		mContextGL.releaseCurrent();
 	}
 
 	public final void destroy() {

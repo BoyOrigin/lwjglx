@@ -75,7 +75,7 @@ final class ContextGL implements Context {
 	}
 
 	public static void setSwapInterval(int value) {
-		GLFW.glfwSetSwapInterval(value);
+		GLFW.glfwSwapInterval(value);
 	}
 
 	public synchronized void forceDestroy() throws LWJGLException {

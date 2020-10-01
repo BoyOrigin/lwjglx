@@ -711,7 +711,7 @@ public class Display {
 	public static void setInitialBackground(float red, float green, float blue) {
 		// System.out.println("TODO: Implement Display.setInitialBackground(float, float, float)");
         
-        if (Windowmhandle != MemoryUtil.NULL) {
+        if (Window.handle != MemoryUtil.NULL) {
             GL11.glClearColor(red, green, blue, 1f);
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         }
