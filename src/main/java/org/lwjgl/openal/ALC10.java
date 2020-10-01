@@ -66,18 +66,20 @@ public class ALC10 {
 	}
     
 // -- Begin LWJGL2 --
-    static ALCContext alcContext;
+    static ALCcontext alcContext;
     
     public static ALCcontext alcCreateContext(ALCdevice device, java.nio.IntBuffer attrList) {
         long alContextHandle = alcCreateContext(device.device, attrList);
         alcContext = new ALCcontext(alContextHandle);
         return alcContext;
     }
-
+    
+    // FIXME if Minecraft 1.12.2 and below crashes here!
+/*
     public static ALCcontext alcGetCurrentContext() {
         return alcContext;
     }
-
+*/
     public static ALCdevice alcGetContextsDevice(ALCcontext context) {
         return AL.alcDevice;
     }
