@@ -72,6 +72,10 @@ public class Display {
 
 		desktopDisplayMode = new DisplayMode(monitorWidth, monitorHeight, monitorBitPerPixel, monitorRefreshRate);
         LWJGLUtil.log("Initial mode: " + desktopDisplayMode);
+        
+        // additional code workaround not called yet!
+        LWJGLUtil.log("Calling Display.create()");
+        create();
 	}
 
 	public static void create(PixelFormat pixel_format, Drawable shared_drawable) throws LWJGLException {
@@ -637,10 +641,6 @@ public class Display {
 	public static void setDisplayMode(DisplayMode dm) throws LWJGLException {
 		mode = dm;
 		newCurrentWindow(GLFW.glfwCreateWindow(dm.getWidth(), dm.getHeight(), windowTitle, 0, 0));
-        
-        // additional code workaround not called yet!
-        LWJGLUtil.log("Calling Display.create()");
-        create();
 	}
 
 	public static DisplayMode getDisplayMode() {
