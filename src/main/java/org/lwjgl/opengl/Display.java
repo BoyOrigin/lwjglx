@@ -101,9 +101,13 @@ public class Display {
 		create();
 	}
 
+    private static boolean isCreated = false;
 	public static void create() throws LWJGLException {
-		if (Window.handle != MemoryUtil.NULL) return;
-			// glfwDestroyWindow(Window.handle);
+        if (isCreated) return;
+        else isCreated = true;
+        
+		if (Window.handle != MemoryUtil.NULL)
+			glfwDestroyWindow(Window.handle);
 
 		long monitor = glfwGetPrimaryMonitor();
 		GLFWVidMode vidmode = glfwGetVideoMode(monitor);
@@ -851,7 +855,7 @@ public class Display {
 		GLFW.glfwSetWindowTitle(newWindow, windowTitle);
 		Window.setCallbacks();
 
-		glfwMakeContextCurrent(Window.handle);
+		// glfwMakeContextCurrent(Window.handle);
 		context = org.lwjgl.opengl.GLContext.createFromCurrent();
 
 		glfwSwapInterval(0);
