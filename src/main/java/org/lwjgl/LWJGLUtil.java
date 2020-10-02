@@ -271,7 +271,7 @@ public class LWJGLUtil {
 		if (osName.startsWith("Windows"))
 			PLATFORM = PLATFORM_WINDOWS;
 		else if (osName.startsWith("Linux") || osName.startsWith("FreeBSD") || osName.startsWith("SunOS")
-				|| osName.startsWith("Unix"))
+				|| osName.startsWith("Unix") || osName.startsWith("Android"))
 			PLATFORM = PLATFORM_LINUX;
 		else if (osName.startsWith("Mac OS X") || osName.startsWith("Darwin"))
 			PLATFORM = PLATFORM_MACOSX;

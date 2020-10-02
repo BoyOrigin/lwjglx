@@ -34,7 +34,140 @@ import static org.lwjgl.system.MemoryUtil.*;
  * </ul>
  */
 public class GL11 {
+// -- Begin LWJGL2 Bridge --
+    public static void glColorPointer(int size, boolean unsigned, int stride, java.nio.ByteBuffer pointer) {
+        glColorPointer(size, unsigned ? GL11.GL_UNSIGNED_BYTE : GL11.GL_BYTE, stride, pointer);
+    }
+    
+    public static void glColorPointer(int size, int stride, FloatBuffer pointer) {
+        glColorPointer(size, GL11.GL_FLOAT, stride, pointer);
+    }
+    
+    public static void glGetBoolean(int p1, java.nio.ByteBuffer p2) {
+        glGetBooleanv(p1, p2);
+    }
 
+    public static void glGetClipPlane(int p1, java.nio.DoubleBuffer p2) {
+        glGetClipPlanedv(p1, p2);
+    }
+
+    public static void glGetDouble(int p1, java.nio.DoubleBuffer p2) {
+        glGetDoublev(p1, p2);
+    }
+
+    public static void glGetFloat(int p1, FloatBuffer p2) {
+        glGetFloatv(p1, p2);
+    }
+
+    public static void glGetInteger(int p1, IntBuffer p2) {
+        glGetIntegerv(p1, p2);
+    }
+
+    public static void glGetLight(int p1, int p2, FloatBuffer p3) {
+        glGetLightfv(p1, p2, p3);
+    }
+
+    public static void glGetLight(int p1, int p2, IntBuffer p3) {
+        glGetLightiv(p1, p2, p3);
+    }
+
+    public static void glGetMap(int p1, int p2, DoubleBuffer p3) {
+        glGetMapdv(p1, p2, p3);
+    }
+
+    public static void glGetMap(int p1, int p2, FloatBuffer p3) {
+        glGetMapfv(p1, p2, p3);
+    }
+
+    public static void glGetMap(int p1, int p2, IntBuffer p3) {
+        glGetMapiv(p1, p2, p3);
+    }
+
+    public static void glGetMaterial(int p1, int p2, FloatBuffer p3) {
+        glGetMaterialfv(p1, p2, p3);
+    }
+
+    public static void glGetMaterial(int p1, int p2, IntBuffer p3) {
+        glGetMaterialiv(p1, p2, p3);
+    }
+
+    public static void glGetPixelMap(int p1, FloatBuffer p2) {
+        glGetPixelMapfv(p1, p2);
+    }
+
+    public static void glGetPixelMapu(int p1, IntBuffer p2) {
+        glGetPixelMapuiv(p1, p2);
+    }
+
+    public static void glGetPixelMapu(int p1, ShortBuffer p2) {
+        glGetPixelMapusv(p1, p2);
+    }
+
+    public static void glGetTexEnv(int p1, int p2, FloatBuffer p3) {
+        glGetTexEnvfv(p1, p2, p3);
+    }
+
+    public static void glGetTexEnv(int p1, int p2, IntBuffer p3) {
+        glGetTexEnviv(p1, p2, p3);
+    }
+
+    public static void glGetTexGen(int p1, int p2, DoubleBuffer p3) {
+        glGetTexGendv(p1, p2, p3);
+    }
+
+    public static void glGetTexGen(int p1, int p2, FloatBuffer p3) {
+        glGetTexGenfv(p1, p2, p3);
+    }
+
+    public static void glGetTexGen(int p1, int p2, IntBuffer p3) {
+        glGetTexGeniv(p1, p2, p3);
+    }
+
+    public static void glGetTexLevelParameter(int target, int level, int pname, FloatBuffer params) {
+        glGetTexLevelParameterfv(target, level, pname, params);
+    }
+
+    public static void glGetTexLevelParameter(int target, int level, int pname, IntBuffer params) {
+        glGetTexLevelParameteriv(target, level, pname, params);
+    }
+
+    public static void glGetTexParameter(int target, int pname, FloatBuffer params) {
+        glGetTexParameterfv(target, pname, params);
+    }
+
+    public static void glGetTexParameter(int target, int pname, IntBuffer params) {
+        glGetTexParameteriv(target, pname, params);
+    }
+
+    public static void glLight(int light, int pname, FloatBuffer params) {
+        glLightfv(light, pname, params);
+    }
+
+    public static void glLight(int light, int pname, IntBuffer params) {
+        glLightiv(light, pname, params);
+    }
+
+    public static void glLightModel(int pname, FloatBuffer params) {
+        glLightModelfv(pname, params);
+    }
+
+    public static void glLightModel(int pname, IntBuffer params) {
+        glLightModeliv(pname, params);
+    }
+    
+    public static void glLoadMatrix(FloatBuffer m) {
+        glLoadMatrixf(m);
+    }
+    
+    public static void glTexCoordPointer(int size, int stride, FloatBuffer pointer) {
+        glTexCoordPointer(size, GL11.GL_FLOAT, stride, pointer);
+    }
+    
+    public static void glVertexPointer(int size, int stride, FloatBuffer pointer) {
+        glVertexPointer(size, GL11.GL_FLOAT, stride, pointer);
+	}
+// ------- end test duplicate ---------
+    
     /** AccumOp */
     public static final int
         GL_ACCUM  = 0x100,
@@ -763,32 +896,6 @@ public class GL11 {
             caps.glTexSubImage2D, caps.glViewport
         );
     }
-    
-// -- Begin LWJGL2 part --
-    public static void glColorPointer(int size, boolean unsigned, int stride, java.nio.ByteBuffer pointer) {
-        org.lwjgl.opengl.GL11.glColorPointer(size, unsigned ? GL11.GL_UNSIGNED_BYTE : GL11.GL_BYTE, stride, pointer);
-    }
-    
-    public static void glColorPointer(int size, int stride, java.nio.FloatBuffer pointer) {
-        org.lwjgl.opengl.GL11.glColorPointer(size, GL11.GL_FLOAT, stride, pointer);
-    }
-    
-    public static void glGetFloat(int pname, java.nio.FloatBuffer params) {
-        org.lwjgl.opengl.GL11.glGetFloatv(pname, params);
-    }
-    
-    public static void glLoadMatrix(java.nio.FloatBuffer m) {
-        org.lwjgl.opengl.GL11.glLoadMatrixf(m);
-    }
-    
-    public static void glTexCoordPointer(int size, int stride, java.nio.FloatBuffer pointer) {
-        org.lwjgl.opengl.GL11.glTexCoordPointer(size, GL11.GL_FLOAT, stride, pointer);
-    }
-    
-    public static void glVertexPointer(int size, int stride, java.nio.FloatBuffer pointer) {
-        org.lwjgl.opengl.GL11.glVertexPointer(size, GL11.GL_FLOAT, stride, pointer);
-	}
-// -- End LWJGL2 part --
 
     // --- [ glEnable ] ---
 
