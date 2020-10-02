@@ -74,8 +74,10 @@ public class Display {
         
         // additional code workaround not called yet!
         LWJGLUtil.log("Calling Display.create()");
-        create();
-	}
+        try {
+            create();
+        } catch (LWJGLException e) {throw new RuntimeException(e);}
+    }
 
 	public static void create(PixelFormat pixel_format, Drawable shared_drawable) throws LWJGLException {
 		// System.out.println("TODO: Implement Display.create(PixelFormat,
