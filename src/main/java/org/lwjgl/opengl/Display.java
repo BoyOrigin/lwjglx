@@ -12,6 +12,7 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
+import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.LWJGLException;
@@ -70,6 +71,7 @@ public class Display {
 		int monitorRefreshRate = vidmode.refreshRate();
 
 		desktopDisplayMode = new DisplayMode(monitorWidth, monitorHeight, monitorBitPerPixel, monitorRefreshRate);
+        LWJGLUtil.log("Initial mode: " + desktopDisplayMode);
 	}
 
 	public static void create(PixelFormat pixel_format, Drawable shared_drawable) throws LWJGLException {
@@ -95,7 +97,6 @@ public class Display {
 	}
 
 	public static void create() throws LWJGLException {
-        System.out.println("org.lwjgl.opengl.Display.create() calling");
 		if (Window.handle != MemoryUtil.NULL)
 			glfwDestroyWindow(Window.handle);
 
@@ -234,7 +235,7 @@ public class Display {
 			displayY = (monitorHeight - mode.getHeight()) / 2;
 		}
 
-		glfwMakeContextCurrent(Window.handle);
+		makeCurrent();
 		context = org.lwjgl.opengl.GLContext.createFromCurrent();
 
 		glfwSwapInterval(0);
@@ -636,6 +637,10 @@ public class Display {
 	public static void setDisplayMode(DisplayMode dm) throws LWJGLException {
 		mode = dm;
 		newCurrentWindow(GLFW.glfwCreateWindow(dm.getWidth(), dm.getHeight(), windowTitle, 0, 0));
+        
+        // additional code workaround not called yet!
+        LWJGLUtil.log("Calling Display.create()");
+        create();
 	}
 
 	public static DisplayMode getDisplayMode() {
