@@ -803,7 +803,7 @@ public class Display {
 	}
 
 	public static void makeCurrent() throws LWJGLException {
-        if (!isCurrent) {
+        if (!isCurrent()) {
 		    glfwMakeContextCurrent(Window.handle);
         }
 	}
