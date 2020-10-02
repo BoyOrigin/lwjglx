@@ -102,8 +102,8 @@ public class Display {
 	}
 
 	public static void create() throws LWJGLException {
-		if (Window.handle != MemoryUtil.NULL)
-			glfwDestroyWindow(Window.handle);
+		if (Window.handle != MemoryUtil.NULL) return;
+			// glfwDestroyWindow(Window.handle);
 
 		long monitor = glfwGetPrimaryMonitor();
 		GLFWVidMode vidmode = glfwGetVideoMode(monitor);
@@ -803,7 +803,9 @@ public class Display {
 	}
 
 	public static void makeCurrent() throws LWJGLException {
-		glfwMakeContextCurrent(Window.handle);
+        if (!isCurrent) {
+		    glfwMakeContextCurrent(Window.handle);
+        }
 	}
 
 	public static java.lang.String getAdapter() {
