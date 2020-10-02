@@ -47,10 +47,6 @@ public class GL11 {
         glGetBooleanv(p1, p2);
     }
 
-    public static void glGetClipPlane(int p1, java.nio.DoubleBuffer p2) {
-        glGetClipPlanedv(p1, p2);
-    }
-
     public static void glGetDouble(int p1, java.nio.DoubleBuffer p2) {
         glGetDoublev(p1, p2);
     }
