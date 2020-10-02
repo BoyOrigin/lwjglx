@@ -240,7 +240,7 @@ public class Display {
 			displayY = (monitorHeight - mode.getHeight()) / 2;
 		}
 
-		makeCurrent();
+		glfwMakeContextCurrent(Window.handle);
 		context = org.lwjgl.opengl.GLContext.createFromCurrent();
 
 		glfwSwapInterval(0);
@@ -804,7 +804,7 @@ public class Display {
 
 	public static void makeCurrent() throws LWJGLException {
         if (!isCurrent()) {
-		    glfwMakeContextCurrent(Window.handle);
+		    // -glfwMakeContextCurrent(Window.handle);
         }
 	}
 
