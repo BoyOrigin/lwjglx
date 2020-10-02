@@ -35,8 +35,7 @@ public class Display {
 	private static boolean displayDirty = false;
 	private static boolean displayResizable = false;
 
-	private static DisplayMode mode = new DisplayMode(640, 480);
-	private static DisplayMode desktopDisplayMode = new DisplayMode(640, 480);
+	private static DisplayMode mode, desktopDisplayMode;
 
 	private static int latestEventKey = 0;
 
@@ -69,8 +68,8 @@ public class Display {
 		int monitorHeight = vidmode.height();
 		int monitorBitPerPixel = vidmode.redBits() + vidmode.greenBits() + vidmode.blueBits();
 		int monitorRefreshRate = vidmode.refreshRate();
-
-		desktopDisplayMode = new DisplayMode(monitorWidth, monitorHeight, monitorBitPerPixel, monitorRefreshRate);
+        
+        mode = desktopDisplayMode = new DisplayMode(monitorWidth, monitorHeight, monitorBitPerPixel, monitorRefreshRate);
         LWJGLUtil.log("Initial mode: " + desktopDisplayMode);
         
         // additional code workaround not called yet!
