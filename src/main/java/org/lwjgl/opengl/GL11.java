@@ -196,10 +196,6 @@ public class GL11 {
     }
     
     // todo texcoordptr bytebuffer
-    public static void glTexCoordPointer(int size, int stride, DoubleBuffer pointer) {
-        glTexCoordPointer(size, GL11.GL_DOUBLE, stride, pointer);
-    }
-    
     public static void glTexCoordPointer(int size, int stride, FloatBuffer pointer) {
         glTexCoordPointer(size, GL11.GL_FLOAT, stride, pointer);
     }
@@ -232,10 +228,6 @@ public class GL11 {
         glTexGeniv(p1, p2, p3);
     }
 
-    public static void glVertexPointer(int size, int stride, DoubleBuffer pointer) {
-        glVertexPointer(size, GL11.GL_DOUBLE, stride, pointer);
-    }
-    
     public static void glVertexPointer(int size, int stride, FloatBuffer pointer) {
         glVertexPointer(size, GL11.GL_FLOAT, stride, pointer);
     }
