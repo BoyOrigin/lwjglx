@@ -129,7 +129,7 @@ public final class AL {
         };
     }
 
-    static void destroy() {
+    public static void destroy() {
         if (functionProvider == null) {
             return;
         }
