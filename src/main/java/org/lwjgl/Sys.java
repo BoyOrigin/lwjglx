@@ -10,15 +10,21 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class Sys {
+    
+    /**
+     * No constructor for Sys.
+     */
+    private Sys() {
+    }
 
+    /** Returns the LWJGL version. */
+    public static String getVersion() {
+        return org.lwjgl.Version.getVersion();
+    }
+    
 	public static void initialize() {
-		if (GLFW.glfwInit() != true)
+		if (!GLFW.glfwInit())
 			throw new IllegalStateException("Unable to initialize GLFW");
-	}
-
-	/** Returns the LWJGL version. */
-	public static String getVersion() {
-		return org.lwjgl.Version.getVersion();
 	}
 
 	/**
@@ -28,7 +34,7 @@ public class Sys {
 	 * @return 1
 	 */
 	public static long getTimerResolution() {
-		return 1;
+		return 1000;
 	}
 
 	/**
@@ -45,7 +51,8 @@ public class Sys {
 	}
 
 	public static long getNanoTime() {
-		return getTime() * 1000L * 1000L;
+        return System.nanoTime();
+		// return getTime() * 1000L * 1000L;
 	}
 
 	public static boolean openURL(String url) {
@@ -60,6 +67,7 @@ public class Sys {
 			desktop.browse(new URI(url));
 			return true;
 		} catch (Exception ex) {
+            ex.printStackTrace();
 			return false;
 		}
 	}
