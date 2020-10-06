@@ -30,7 +30,7 @@ public class Display {
 	private static DisplayImplementation currentImpl;
 
 	private static boolean displayCreated = false;
-	private static boolean displayFocused = false;
+	private static boolean displayFocused = true;
 	private static boolean displayVisible = true;
 	private static boolean displayDirty = false;
 	private static boolean displayResizable = false;
