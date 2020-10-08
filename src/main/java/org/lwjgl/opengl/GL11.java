@@ -183,6 +183,10 @@ public class GL11 {
         glMultMatrixf(p1);
     }
 
+    public static void glNormalPointer(int stride, ByteBuffer pointer) {
+        glNormalPointer(GL11.GL_BYTE, stride, pointer);
+    }
+    
     public static void glNormalPointer(int stride, FloatBuffer pointer) {
         glNormalPointer(GL11.GL_FLOAT, stride, pointer);
     }
@@ -194,6 +198,7 @@ public class GL11 {
     public static void glNormalPointer(int stride, ShortBuffer pointer) {
         glNormalPointer(GL11.GL_SHORT, stride, pointer);
     }
+    
     public static void glPixelMap(int p1, java.nio.FloatBuffer p2) {
         glPixelMapfv(p1, p2);
     }
