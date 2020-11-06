@@ -237,11 +237,188 @@ public class GL20 extends GL15 {
         return s;
     }
 
-    public static void glShaderSource(int shader, java.nio.ByteBuffer string) {
+    public static void glShaderSource(int shader, ByteBuffer string) {
         byte[] b = new byte[string.remaining()];
         string.get(b);
-        org.lwjgl.opengl.GL20.glShaderSource(shader, new String(b));
+        glShaderSource(shader, new String(b));
 	}
+    
+    // TODO port below
+/*
+    public static String glGetActiveAttrib(int i, int i2, int i3) {
+        int i4 = i;
+        int i5 = i2;
+        int i6 = i3;
+        ContextCapabilities capabilities = GLContext.getCapabilities();
+        long j = capabilities.glGetActiveAttrib;
+        BufferChecks.checkFunctionAddress(j);
+        Buffer lengths = APIUtil.getLengths(capabilities);
+        ByteBuffer bufferByte = APIUtil.getBufferByte(capabilities, i6);
+        nglGetActiveAttrib(i4, i5, i6, MemoryUtil.memAddress(lengths), MemoryUtil.memAddress(APIUtil.getBufferInt(capabilities)), MemoryUtil.getAddress(APIUtil.getBufferInt(capabilities), 1), MemoryUtil.getAddress(bufferByte), j);
+        Buffer limit = bufferByte.limit(lengths.get(0));
+        return APIUtil.getString(capabilities, bufferByte);
+    }
+
+    public static int glGetActiveAttribSize(int i, int i2) {
+        int i3 = i;
+        int i4 = i2;
+        ContextCapabilities capabilities = GLContext.getCapabilities();
+        long j = capabilities.glGetActiveAttrib;
+        BufferChecks.checkFunctionAddress(j);
+        IntBuffer bufferInt = APIUtil.getBufferInt(capabilities);
+        nglGetActiveAttrib(i3, i4, 0, 0, MemoryUtil.getAddress(bufferInt), MemoryUtil.getAddress(bufferInt, 1), APIUtil.getBufferByte0(capabilities), j);
+        return bufferInt.get(0);
+    }
+
+    public static int glGetActiveAttribType(int i, int i2) {
+        int i3 = i;
+        int i4 = i2;
+        ContextCapabilities capabilities = GLContext.getCapabilities();
+        long j = capabilities.glGetActiveAttrib;
+        BufferChecks.checkFunctionAddress(j);
+        IntBuffer bufferInt = APIUtil.getBufferInt(capabilities);
+        nglGetActiveAttrib(i3, i4, 0, 0, MemoryUtil.getAddress(bufferInt, 1), MemoryUtil.getAddress(bufferInt), APIUtil.getBufferByte0(capabilities), j);
+        return bufferInt.get(0);
+    }
+
+    public static String glGetActiveUniform(int i, int i2, int i3) {
+        int i4 = i;
+        int i5 = i2;
+        int i6 = i3;
+        ContextCapabilities capabilities = GLContext.getCapabilities();
+        long j = capabilities.glGetActiveUniform;
+        BufferChecks.checkFunctionAddress(j);
+        Buffer lengths = APIUtil.getLengths(capabilities);
+        ByteBuffer bufferByte = APIUtil.getBufferByte(capabilities, i6);
+        nglGetActiveUniform(i4, i5, i6, MemoryUtil.memAddress(lengths), MemoryUtil.memAddress(APIUtil.getBufferInt(capabilities)), MemoryUtil.getAddress(APIUtil.getBufferInt(capabilities), 1), MemoryUtil.getAddress(bufferByte), j);
+        Buffer limit = bufferByte.limit(lengths.get(0));
+        return APIUtil.getString(capabilities, bufferByte);
+    }
+
+    public static int glGetActiveUniformSize(int i, int i2) {
+        int i3 = i;
+        int i4 = i2;
+        ContextCapabilities capabilities = GLContext.getCapabilities();
+        long j = capabilities.glGetActiveUniform;
+        BufferChecks.checkFunctionAddress(j);
+        IntBuffer bufferInt = APIUtil.getBufferInt(capabilities);
+        nglGetActiveUniform(i3, i4, 1, 0, MemoryUtil.getAddress(bufferInt), MemoryUtil.getAddress(bufferInt, 1), APIUtil.getBufferByte0(capabilities), j);
+        return bufferInt.get(0);
+    }
+
+    public static int glGetActiveUniformType(int i, int i2) {
+        int i3 = i;
+        int i4 = i2;
+        ContextCapabilities capabilities = GLContext.getCapabilities();
+        long j = capabilities.glGetActiveUniform;
+        BufferChecks.checkFunctionAddress(j);
+        IntBuffer bufferInt = APIUtil.getBufferInt(capabilities);
+        nglGetActiveUniform(i3, i4, 0, 0, MemoryUtil.getAddress(bufferInt, 1), MemoryUtil.getAddress(bufferInt), APIUtil.getBufferByte0(capabilities), j);
+        return bufferInt.get(0);
+    }
+*/
+
+    @Deprecated
+    public static int glGetProgram(int i, int i2) {
+        return glGetProgrami(i, i2);
+    }
+
+    public static void glGetProgram(int program, int pname, IntBuffer params) {
+        glGetProgramiv(program, pname, params);
+    }
+    
+    @Deprecated
+    public static int glGetShader(int i, int i2) {
+        return glGetShaderi(i, i2);
+    }
+
+    public static void glGetShader(int shader, int pname, IntBuffer params) {
+        glGetShaderiv(shader, pname, params);
+    }
+
+    public static void glGetUniform(int program, int location, FloatBuffer params) {
+        glGetUniformfv(program, location, params);
+    }
+    
+    public static void glGetUniform(int program, int location, IntBuffer params) {
+        glGetUniformiv(program, location, params);
+    }
+
+    public static void glGetVertexAttrib(int index, int pname, DoubleBuffer params) {
+        glGetVertexAttribdv(index, pname, params);
+    }
+    
+    public static void glGetVertexAttrib(int index, int pname, FloatBuffer params) {
+        glGetVertexAttribfv(index, pname, params);
+    }
+    
+    public static void glGetVertexAttrib(int index, int pname, IntBuffer params) {
+        glGetVertexAttribiv(index, pname, params);
+    }
+
+    // FIXME
+/*
+    public static ByteBuffer glGetVertexAttribPointer(int i, int i2, long j) {
+        glGetVertexa
+    }
+    
+    public static void glGetVertexAttribPointer(int index, int pname, ByteBuffer buffer) {
+        glGetVertexAttribPointer(index, pname);
+    }
+*/
+    public static void glUniform1(int location, FloatBuffer buffer) {
+        glUniform1fv(location, buffer);
+    }
+
+    public static void glUniform1(int location, IntBuffer buffer) {
+        glUniform1iv(location, buffer);
+    }
+    
+    public static void glUniform2(int location, FloatBuffer buffer) {
+        glUniform2fv(location, buffer);
+    }
+
+    public static void glUniform2(int location, IntBuffer buffer) {
+        glUniform2iv(location, buffer);
+    }
+    
+    public static void glUniform3(int location, FloatBuffer buffer) {
+        glUniform3fv(location, buffer);
+    }
+
+    public static void glUniform3(int location, IntBuffer buffer) {
+        glUniform3iv(location, buffer);
+    }
+    
+    public static void glUniform4(int location, FloatBuffer buffer) {
+        glUniform4fv(location, buffer);
+    }
+    
+    public static void glUniform4(int location, IntBuffer buffer) {
+        glUniform4iv(location, buffer);
+    }
+
+    public static void glUniformMatrix2(int location, boolean transpose, FloatBuffer buffer) {
+        glUniformMatrix2fv(location, transpose, buffer);
+    }
+
+    public static void glUniformMatrix3(int location, boolean transpose, FloatBuffer buffer) {
+        glUniformMatrix3fv(location, transpose, buffer);
+    }
+
+    public static void glUniformMatrix4(int location, boolean transpose, FloatBuffer buffer) {
+        glUniformMatrix4fv(location, transpose, buffer);
+    }
+
+    // FIXME
+/*
+    public static void glVertexAttribPointer(int index, int size, boolean normalized, int stride, DoubleBuffer buffer) {
+        glVertexAttribPointer(index, size, GL11.GL_DOUBLE, normalized, stride, buffer);
+    }
+*/
+    public static void glVertexAttribPointer(int index, int size, boolean normalized, int stride, FloatBuffer buffer) {
+        glVertexAttribPointer(index, size, GL11.GL_FLOAT, normalized, stride, buffer);
+    }
 // -- End LWJGL2 part --
 
     // --- [ glCreateProgram ] ---
