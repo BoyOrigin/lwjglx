@@ -55,6 +55,8 @@ public class Display {
     private static boolean vsyncEnabled = false;
     private static boolean displayFullscreen = false;
     private static float fps;
+    
+    private static Canvas parent;
 
     private static GLFWImage.Buffer icons;
 
@@ -631,7 +633,46 @@ public class Display {
             displayResized = false;
         }
     }
+    
+    /** Return the last parent set with setParent(). */
+    public static Canvas getParent() {
+        return parent;
+    }
 
+    /**
+     * Set the parent of the Display. If parent is null, the Display will appear as a top level window.
+     * If parent is not null, the Display is made a child of the parent. A parent's isDisplayable() must be true when
+     * setParent() is called and remain true until setParent() is called again with
+     * null or a different parent. This generally means that the parent component must remain added to it's parent container.<p>
+     * It is not advisable to call this method from an AWT thread, since the context will be made current on the thread
+     * and it is difficult to predict which AWT thread will process any given AWT event.<p>
+     * While the Display is in fullscreen mode, the current parent will be ignored. Additionally, when a non null parent is specified,
+     * the Dispaly will inherit the size of the parent, disregarding the currently set display mode.<p>
+     */
+    public static void setParent(Canvas parent) throws LWJGLException {
+        if ( Display.parent != parent ) {
+            Display.parent = parent;
+            /*
+            if ( !isCreated() )
+                return;
+            destroyWindow();
+            try {
+                if ( isFullscreen() ) {
+                    switchDisplayMode();
+                } else {
+                    display_impl.resetDisplayMode();
+                }
+                createWindow();
+                makeCurrentAndSetSwapInterval();
+            } catch (LWJGLException e) {
+                drawable.destroy();
+                display_impl.resetDisplayMode();
+                throw e;
+            }
+            */
+        }
+	}
+    
     public static void swapBuffers() throws LWJGLException {
         glfwSwapBuffers(Window.handle);
     }
