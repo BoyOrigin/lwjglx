@@ -58,7 +58,7 @@ abstract class DrawableGL implements DrawableLWJGL {
 
 	public void setPixelFormat(final PixelFormatLWJGL pf, final ContextAttribs attribs) throws LWJGLException {
 		this.pixel_format = (PixelFormat)pf;
-		//this.peer_info = Display.getImplementation().createPeerInfo(pixel_format, attribs);
+		this.peer_info = Display.getImplementation().createPeerInfo(pixel_format, attribs);
 	}
 
 	public PixelFormatLWJGL getPixelFormat() {
@@ -73,9 +73,9 @@ abstract class DrawableGL implements DrawableLWJGL {
 
 	public ContextGL createSharedContext() throws LWJGLException {
 		synchronized ( GlobalLock.lock ) {
-			//checkDestroyed();
-			//return new ContextGL(peer_info, context.getContextAttribs(), context);
-			return null;
+			checkDestroyed();
+			return new ContextGL(/*peer_info, context.getContextAttribs(), context*/);
+			// return null;
 		}
 	}
 

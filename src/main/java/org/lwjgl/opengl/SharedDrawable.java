@@ -32,66 +32,26 @@
 package org.lwjgl.opengl;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.PointerBuffer;
-
-import org.lwjgl.glfw.*;
 
 /**
- * <p/>
- * Context encapsulates an OpenGL context.
- * <p/>
- * <p/>
- * This class is thread-safe.
- *
- * @author elias_naur <elias_naur@users.sourceforge.net>
- * @version $Revision$
- *          $Id$
+ * @author Spasi
  */
-final class ContextGL implements Context {
-    private boolean isCurrent = false;
-	// private final ContextAttribs contextAttribs;
-	public void releaseCurrent() throws LWJGLException {
-		isCurrent = false;
-	}
 
-	public synchronized void releaseDrawable() throws LWJGLException {
-		
-	}
+/**
+ * A Drawable implementation that shares its context with another Drawable. This is useful
+ * for background loading of resources. See org.lwjgl.test.opengl.multithread.BackgroundLoad
+ * for an example.
+ *
+ * @author Spasi
+ */
+public final class SharedDrawable extends DrawableGL {
 
-	public synchronized void update() {
-		Display.update();
-	}
-
-	public static void swapBuffers() throws LWJGLException {
-		Display.swapBuffers();
-	}
-
-	public synchronized void makeCurrent() throws LWJGLException {
-		Display.makeCurrent();
-        isCurrent = true;
-	}
-
-	public synchronized boolean isCurrent() throws LWJGLException {
-		return isCurrent;
-	}
-
-	public static void setSwapInterval(int value) {
-		GLFW.glfwSwapInterval(value);
-	}
-
-	public synchronized void forceDestroy() throws LWJGLException {
-		Display.destroy();
-	}
-
-	public synchronized void destroy() throws LWJGLException {
-		Display.destroy();
-	}
-
-	public synchronized void setCLSharingProperties(final PointerBuffer properties) throws LWJGLException {
-		
-	}
-
-    ContextAttribs getContextAttribs() {
-        return null;
+    public SharedDrawable(final Drawable drawable) throws LWJGLException {
+        this.context = (ContextGL)((DrawableLWJGL)drawable).createSharedContext();
     }
+
+    public ContextGL createSharedContext() {
+        throw new UnsupportedOperationException();
+    }
+
 }
