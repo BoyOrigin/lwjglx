@@ -53,7 +53,7 @@ public class Display {
     private static int latestHeight = 0;
 
     private static boolean vsyncEnabled = false;
-    private static boolean displayFullscreen = false;
+    private static boolean displayFullscreen = true;
     private static float fps;
     
     private static Canvas parent;
@@ -857,6 +857,9 @@ public class Display {
         if (!isCurrent()) {
             // -glfwMakeContextCurrent(Window.handle);
         }
+        
+        // PojavLauncher patch: force fullscreen
+        setFullscreen(true);
     }
 
     public static java.lang.String getAdapter() {

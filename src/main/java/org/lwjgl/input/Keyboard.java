@@ -167,7 +167,7 @@ public class Keyboard {
 	private static int[] keyEvents = new int[queue.getMaxEvents()];
 	private static boolean[] keyEventStates = new boolean[queue.getMaxEvents()];
 	private static long[] nanoTimeEvents = new long[queue.getMaxEvents()];
-	private static volatile char[] keyEventChars = new char[256];
+	private static char[] keyEventChars = new char[256];
 
 	private static boolean repeatEvents = false;
 	private static int latestEventKey = 0;
