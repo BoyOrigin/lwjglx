@@ -66,8 +66,8 @@ public class Display {
         long monitor = glfwGetPrimaryMonitor();
         GLFWVidMode vidmode = glfwGetVideoMode(monitor);
 
-        int monitorWidth = vidmode.width();
-        int monitorHeight = vidmode.height();
+        int monitorWidth = displayWidth = displayFramebufferWidth = vidmode.width();
+        int monitorHeight = displayHeight = displayFramebufferHeight = vidmode.height();
         int monitorBitPerPixel = vidmode.redBits() + vidmode.greenBits() + vidmode.blueBits();
         int monitorRefreshRate = vidmode.refreshRate();
 
@@ -857,9 +857,6 @@ public class Display {
         if (!isCurrent()) {
             // -glfwMakeContextCurrent(Window.handle);
         }
-        
-        // PojavLauncher patch: force fullscreen
-        setFullscreen(true);
     }
 
     public static java.lang.String getAdapter() {
