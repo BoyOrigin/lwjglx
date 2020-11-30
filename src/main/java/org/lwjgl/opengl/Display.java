@@ -816,6 +816,7 @@ public class Display {
     }
 
     public static void setFullscreen(boolean fullscreen) throws LWJGLException {
+        System.out.println("LWJGLX: switch fullscreen to " + fullscreen);
         if (isFullscreen() ^ fullscreen) {
             if (fullscreen && (!mode.isFullscreenCapable()))
                 throw new LWJGLException("Display mode is not fullscreen capable");
