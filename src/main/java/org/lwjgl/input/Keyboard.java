@@ -229,6 +229,10 @@ public class Keyboard {
 		keyEventChars[index] = c;
 	}
 
+        public static boolean areRepeatEventsEnabled() {
+                return false;
+        }
+
 	public static void create() throws LWJGLException {
 
 	}
