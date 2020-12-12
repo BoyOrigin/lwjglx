@@ -116,7 +116,7 @@ public class Display {
     private static void initControls() {
         // Automatically create mouse, keyboard and controller
         if ( true ) {
-            if ( !Mouse.isCreated() && !getPrivilegedBoolean("org.lwjgl.opengl.Display.nomouse") ) {
+            if ( !Mouse.isCreated() ) {
                 try {
                     Mouse.create();
                 } catch (LWJGLException e) {
@@ -227,7 +227,7 @@ public class Display {
             try {
                 createWindow();
                 try {
-                    drawable.context = new ContextGL(drawable.peer_info, attribs, shared_drawable != null ? ((DrawableGL)shared_drawable).getContext() : null);
+                    drawable.context = new ContextGL(drawable.peer_info, null /* attribs */, shared_drawable != null ? ((DrawableGL)shared_drawable).getContext() : null);
                     try {
                         makeCurrentAndSetSwapInterval();
                         initContext();
