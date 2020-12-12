@@ -109,13 +109,13 @@ public class Display {
     }
 
     private static void initContext() {
-        drawable.initContext(r, g, b);
+        drawable.initContext(0, 0, 0);
         update();
 	}
     
     private static void initControls() {
         // Automatically create mouse, keyboard and controller
-        if ( !getPrivilegedBoolean("org.lwjgl.opengl.Display.noinput") ) {
+        if ( true ) {
             if ( !Mouse.isCreated() && !getPrivilegedBoolean("org.lwjgl.opengl.Display.nomouse") ) {
                 try {
                     Mouse.create();
@@ -127,7 +127,7 @@ public class Display {
                     }
                 }
             }
-            if ( !Keyboard.isCreated() && !getPrivilegedBoolean("org.lwjgl.opengl.Display.nokeyboard") ) {
+            if ( !Keyboard.isCreated() ) {
                 try {
                     Keyboard.create();
                 } catch (LWJGLException e) {
@@ -179,7 +179,7 @@ public class Display {
             return;
         }
         DisplayMode mode = Display.getDisplayMode();
-        display_impl.createWindow(drawable, mode, null, getWindowX(), getWindowY());
+        display_impl.createWindow(drawable, mode, null, 0, 0 /* getWindowX(), getWindowY() */);
         window_created = true;
 
         displayWidth = mode.getWidth();
