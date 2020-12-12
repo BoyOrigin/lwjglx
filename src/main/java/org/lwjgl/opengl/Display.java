@@ -27,7 +27,7 @@ public class Display {
 
     private static org.lwjgl.opengl.GLContext context;
 
-    private static DisplayImplementation currentImpl;
+    private static DisplayImplementation display_impl;
 
     private static boolean displayCreated = false;
     private static boolean displayFocused = true;
@@ -56,9 +56,16 @@ public class Display {
     private static boolean displayFullscreen = true;
     private static float fps;
     
+    private static boolean window_created;
+
+    /** The Drawable instance that tracks the current Display context */
+    private static DrawableLWJGL drawable;
+    
     private static Canvas parent;
 
     private static GLFWImage.Buffer icons;
+
+    private static int swap_interval;
 
     static {
         Sys.initialize(); // init using dummy sys method
@@ -80,11 +87,166 @@ public class Display {
             create();
         } catch (LWJGLException e) {throw new RuntimeException(e);}
     }
+    
+    public static void setSwapInterval(int value) {
+        synchronized ( GlobalLock.lock ) {
+            swap_interval = value;
+            if ( isCreated() ) {
+                drawable.setSwapInterval(swap_interval);
+                
+            }
+        }
+	}
+    
+    private static void makeCurrentAndSetSwapInterval() throws LWJGLException {
+        makeCurrent();
+        try {
+            drawable.checkGLError();
+        } catch (OpenGLException e) {
+            LWJGLUtil.log("OpenGL error during context creation: " + e.getMessage());
+        }
+        setSwapInterval(swap_interval);
+    }
 
+    private static void initContext() {
+        drawable.initContext(r, g, b);
+        update();
+	}
+    
+    private static void initControls() {
+        // Automatically create mouse, keyboard and controller
+        if ( !getPrivilegedBoolean("org.lwjgl.opengl.Display.noinput") ) {
+            if ( !Mouse.isCreated() && !getPrivilegedBoolean("org.lwjgl.opengl.Display.nomouse") ) {
+                try {
+                    Mouse.create();
+                } catch (LWJGLException e) {
+                    if ( LWJGLUtil.DEBUG ) {
+                        e.printStackTrace(System.err);
+                    } else {
+                        LWJGLUtil.log("Failed to create Mouse: " + e);
+                    }
+                }
+            }
+            if ( !Keyboard.isCreated() && !getPrivilegedBoolean("org.lwjgl.opengl.Display.nokeyboard") ) {
+                try {
+                    Keyboard.create();
+                } catch (LWJGLException e) {
+                    if ( LWJGLUtil.DEBUG ) {
+                        e.printStackTrace(System.err);
+                    } else {
+                        LWJGLUtil.log("Failed to create Keyboard: " + e);
+                    }
+                }
+            }
+        }
+	}
+    
+    private static void releaseDrawable() {
+        try {
+            Context context = drawable.getContext();
+            if ( context != null && context.isCurrent() ) {
+                context.releaseCurrent();
+                context.releaseDrawable();
+            }
+        } catch (LWJGLException e) {
+            LWJGLUtil.log("Exception occurred while trying to release context: " + e);
+        }
+	}
+    
+    private static void destroyWindow() {
+        if ( !window_created ) {
+            return;
+        }
+        releaseDrawable();
+
+        // Automatically destroy keyboard & mouse
+        if ( Mouse.isCreated() ) {
+            Mouse.destroy();
+        }
+        if ( Keyboard.isCreated() ) {
+            Keyboard.destroy();
+        }
+        display_impl.destroyWindow();
+        window_created = false;
+	}
+    
+    private static void reset() {
+        display_impl.resetDisplayMode();
+	}
+    
+    private static void createWindow() throws LWJGLException {
+        if ( window_created ) {
+            return;
+        }
+        DisplayMode mode = Display.getDisplayMode();
+        display_impl.createWindow(drawable, mode, null, getWindowX(), getWindowY());
+        window_created = true;
+
+        displayWidth = mode.getWidth();
+        displayHeight = mode.getHeight();
+
+        // setTitle(title);
+        initControls();
+
+        // set cached window icon if exists
+        /*
+        if ( cached_icons != null ) {
+            setIcon(cached_icons);
+        } else {
+            
+        }
+        */
+        
+        setIcon(new ByteBuffer[] { LWJGLUtil.LWJGLIcon32x32, LWJGLUtil.LWJGLIcon16x16 });
+	}
+    
     public static void create(PixelFormat pixel_format, Drawable shared_drawable) throws LWJGLException {
         // System.out.println("TODO: Implement Display.create(PixelFormat,
         // Drawable)"); // TODO
         create(pixel_format);
+        
+        final DrawableGL drawable = new DrawableGL() {
+            public void destroy() {
+                synchronized ( GlobalLock.lock ) {
+                    if ( !isCreated() )
+                        return;
+
+                    releaseDrawable();
+                    super.destroy();
+                    destroyWindow();
+                    // x = y = -1;
+                    // cached_icons = null;
+                    reset();
+                }
+            }
+        };
+        Display.drawable = drawable;
+
+        try {
+            drawable.setPixelFormat(pixel_format, null);
+            try {
+                createWindow();
+                try {
+                    drawable.context = new ContextGL(drawable.peer_info, attribs, shared_drawable != null ? ((DrawableGL)shared_drawable).getContext() : null);
+                    try {
+                        makeCurrentAndSetSwapInterval();
+                        initContext();
+                    } catch (LWJGLException e) {
+                        //drawable.destroy();
+                        throw e;
+                    }
+                } catch (LWJGLException e) {
+                    destroyWindow();
+                    throw e;
+                }
+            } catch (LWJGLException e) {
+                drawable.destroy();
+                throw e;
+            }
+        } catch (LWJGLException e) {
+            display_impl.resetDisplayMode();
+            throw e;
+        }
     }
 
     public static void create(PixelFormat pixel_format, ContextAttribs attribs) throws LWJGLException {
@@ -256,7 +418,7 @@ public class Display {
         Keyboard.create();
 
         // glfwSetWindowIcon(Window.handle, icons);
-        currentImpl = new DisplayImplementation() {
+        display_impl = new DisplayImplementation() {
 
             @Override
             public void setNativeCursor(Object handle) throws LWJGLException {
@@ -883,11 +1045,11 @@ public class Display {
     }
 
     public static Drawable getDrawable() {
-        return null;
-    }
+        return drawable;
+	}
 
     static DisplayImplementation getImplementation() {
-        return currentImpl;
+        return display_impl;
     }
 
     private static void newCurrentWindow(long newWindow) {

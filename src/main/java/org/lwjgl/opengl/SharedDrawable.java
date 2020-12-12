@@ -51,7 +51,8 @@ public final class SharedDrawable extends DrawableGL {
     }
 
     public ContextGL createSharedContext() {
-        throw new UnsupportedOperationException();
+        return context;
+        // throw new UnsupportedOperationException();
     }
 
 }
