@@ -74,7 +74,7 @@ abstract class DrawableGL implements DrawableLWJGL {
 	public ContextGL createSharedContext() throws LWJGLException {
 		synchronized ( GlobalLock.lock ) {
 			checkDestroyed();
-			return new ContextGL(/*peer_info, context.getContextAttribs(), context*/);
+			return new ContextGL(peer_info, context.getContextAttribs(), context);
 			// return null;
 		}
 	}
