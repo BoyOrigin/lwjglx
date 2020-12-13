@@ -1072,7 +1072,7 @@ public class Display {
         glfwShowWindow(Window.handle);
     }
 
-    private static class Window {
+    static class Window {
         static long handle;
 
         static GLFWKeyCallback keyCallback;

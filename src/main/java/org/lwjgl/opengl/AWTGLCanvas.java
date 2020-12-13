@@ -45,17 +45,20 @@ public class AWTGLCanvas extends Canvas implements Drawable, ComponentListener, 
 	private static final long serialVersionUID = 1L;
 
     private ContextGL mContextGL;
+    private PixelFormatLWJGL mPixelFormat;
+    private ContextAttribs mCtxAttrs;
     
 	public void setPixelFormat(final PixelFormatLWJGL pf) throws LWJGLException {
-		throw new UnsupportedOperationException();
+		mPixelFormat = pf;
 	}
 
 	public void setPixelFormat(final PixelFormatLWJGL pf, final ContextAttribs attribs) throws LWJGLException {
-		throw new UnsupportedOperationException();
+	    mPixelFormat = pf;
+        mCtxAttrs = attribs;
 	}
 
 	public PixelFormatLWJGL getPixelFormat() {
-		return null;
+		return mPixelFormat;
 	}
 
 	public ContextGL getContext() {
@@ -63,7 +66,7 @@ public class AWTGLCanvas extends Canvas implements Drawable, ComponentListener, 
 	}
 
 	public ContextGL createSharedContext() throws LWJGLException {
-        mContextGL = new ContextGL();
+        mContextGL = new ContextGL(getContext().getPeerInfo(), mCtxAttrs, null);
 		return mContextGL;
 	}
 

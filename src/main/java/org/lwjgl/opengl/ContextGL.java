@@ -184,7 +184,7 @@ final class ContextGL implements Context {
             throw new IllegalStateException("Context is destroyed");
         thread = Thread.currentThread();
         current_context_local.set(this);
-        GLFW.glfwMakeContextCurrent(Window.handle);
+        GLFW.glfwMakeContextCurrent(Display.Window.handle);
         isCurrent = true;
     }
 
@@ -285,7 +285,7 @@ final class ContextGL implements Context {
             }
             */
         } finally {
-            peer_info.unlock();
+            // peer_info.unlock();
         }
     }
 
