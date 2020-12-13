@@ -105,7 +105,7 @@ final class ContextGL implements Context {
             if ( shared_context != null && shared_context.destroyed )
                 throw new IllegalArgumentException("Shared context is destroyed");
             // GLContext.loadOpenGLLibrary();
-            try {
+            // try {
                 this.peer_info = peer_info;
                 this.contextAttribs = attribs;
 /*
@@ -123,10 +123,10 @@ final class ContextGL implements Context {
 
                 this.handle = null;
                 // implementation.create(peer_info, attribList, shared_context != null ? shared_context.handle : null);
-            } catch (LWJGLException e) {
+            /* } catch (LWJGLException e) {
                 // GLContext.unloadOpenGLLibrary();
                 throw e;
-            }
+            } */
         }
     }
 
