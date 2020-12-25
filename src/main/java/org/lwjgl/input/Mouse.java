@@ -226,6 +226,10 @@ public class Mouse {
 	public static Cursor getCurrentCursor() {
 		return currentCursor;
 	}
+	
+    public static Cursor getNativeCursor() {
+        return currentCursor;
+    }
 
 	public static void destroy() {
 
