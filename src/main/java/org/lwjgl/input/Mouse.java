@@ -230,6 +230,10 @@ public class Mouse {
     public static Cursor getNativeCursor() {
         return currentCursor;
     }
+    
+    public static boolean hasWheel() {
+        return true;
+    }
 
 	public static void destroy() {
 
