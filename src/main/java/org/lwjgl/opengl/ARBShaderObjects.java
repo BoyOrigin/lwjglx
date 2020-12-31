@@ -143,8 +143,8 @@ public class ARBShaderObjects {
         glUniform4ivARB(location, value);
     }
     
-    public static void glGetObjectParameterivARB(@NativeType("GLhandleARB") int obj, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params) {
-        glGetObjectParameterARB(obj, pname, params);
+    public static void glGetObjectParameterARB(@NativeType("GLhandleARB") int obj, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params) {
+        glGetObjectParameterivARB(obj, pname, params);
     }
 // -- End LWJGL2 part --
     
