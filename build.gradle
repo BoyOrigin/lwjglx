@@ -22,7 +22,7 @@ switch (OperatingSystem.current()) {
 }
 
 group = 'org.lwjgl'
-version = '0.12'
+version = '0.14'
 buildDir = new File(rootProject.projectDir, "build/")
 
 java {
@@ -30,22 +30,6 @@ java {
 	targetCompatibility = JavaVersion.VERSION_1_8
 
 	withSourcesJar()
-}
-
-sourceSets {
-	main {
-		java {
-			srcDir 'src/main/java'
-		}
-		resources {
-			srcDir 'src/main/resources'
-		}
-	}
-	test {
-		java {
-			srcDir 'src/test/java'
-		}
-	}
 }
 
 repositories {
