@@ -33,6 +33,7 @@ package org.lwjgl.opengl;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.LWJGLXHelper;
 
 import java.awt.*;
 import java.awt.event.ComponentEvent;
@@ -79,7 +80,9 @@ public class AWTGLCanvas extends Canvas implements Drawable, ComponentListener, 
 	}
 
 	public AWTGLCanvas() throws LWJGLException {
-		//Display.create();
+		if (!LWJGLXHelper.awtCanvasNoCreate) {
+			Display.create();
+		}
 	}
 
 	public AWTGLCanvas(PixelFormat pixel_format) throws LWJGLException {

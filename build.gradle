@@ -22,7 +22,7 @@ switch (OperatingSystem.current()) {
 }
 
 group = 'org.lwjgl'
-version = '0.14'
+version = '0.15'
 buildDir = new File(rootProject.projectDir, "build/")
 
 java {
@@ -48,6 +48,13 @@ dependencies {
 	runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
 	runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
 	implementation  'com.google.code.findbugs:jsr305:3.0.2'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+	useJUnitPlatform()
 }
 
 afterEvaluate {

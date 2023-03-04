@@ -34,7 +34,7 @@ public class Display {
     private static boolean displayFocused = true;
     private static boolean displayVisible = true;
     private static boolean displayDirty = false;
-    private static boolean displayResizable = false;
+    private static boolean displayResizable = LWJGLXHelper.earlyDisplayResizable;
 
     private static DisplayMode mode, desktopDisplayMode;
 
@@ -82,11 +82,15 @@ public class Display {
         mode = desktopDisplayMode = new DisplayMode(monitorWidth, monitorHeight, monitorBitPerPixel, monitorRefreshRate);
         LWJGLUtil.log("Initial mode: " + desktopDisplayMode);
 
-        // additional code workaround not called yet!
-        LWJGLUtil.log("Calling Display.create()");
-        try {
-            create();
-        } catch (LWJGLException e) {throw new RuntimeException(e);}
+        if (LWJGLXHelper.earlyDisplayCreate) {
+            // additional code workaround not called yet!
+            LWJGLUtil.log("Calling Display.create()");
+            try {
+                create();
+            } catch (LWJGLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
     
     public static void setSwapInterval(int value) {
@@ -420,7 +424,8 @@ public class Display {
         Mouse.create();
         Keyboard.create();
 
-        // glfwSetWindowIcon(Window.handle, icons);
+        if (icons != null && parent == null)
+            glfwSetWindowIcon(Window.handle, icons);
         display_impl = new DisplayImplementation() {
 
             @Override
@@ -851,9 +856,15 @@ public class Display {
     }
 
     public static void setDisplayMode(DisplayMode dm) throws LWJGLException {
+        if (dm.equals(mode)) return;
+        boolean attrChange = dm.lwjglxAttrChange(mode);
         mode = dm;
-        if (LWJGLXHelper.resizeRecreateDisplay) {
-            newCurrentWindow(GLFW.glfwCreateWindow(dm.getWidth(), dm.getHeight(), windowTitle, 0, 0));
+        if (Window.handle == NULL) return; // LWJGLX - Allow setDisplayMode even when display is not yet created.
+        boolean fullscreen = displayFullscreen && dm.isFullscreenCapable();
+        if (LWJGLXHelper.resizeRecreateDisplay || (attrChange && LWJGLXHelper.attrRecreateDisplay)) {
+            newCurrentWindow(GLFW.glfwCreateWindow(dm.getWidth(), dm.getHeight(), windowTitle,
+                    fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL));
+            displayFullscreen = fullscreen;
         } else {
             GLFW.glfwSetWindowSize(Window.handle, dm.getWidth(), dm.getHeight());
         }
@@ -959,7 +970,7 @@ public class Display {
 
     public static void setResizable(boolean resizable) {
         if (displayResizable ^ resizable) {
-            if (Window.handle != 0) {
+            if (Window.handle != MemoryUtil.NULL) {
                 IntBuffer width = BufferUtils.createIntBuffer(1);
                 IntBuffer height = BufferUtils.createIntBuffer(1);
                 GLFW.glfwGetWindowSize(Window.handle, width, height);
@@ -971,7 +982,7 @@ public class Display {
                 glfwWindowHint(GLFW_RESIZABLE, displayResizable ? GL_TRUE : GL_FALSE);
                 glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
-                if (LWJGLXHelper.resizeRecreateDisplay) {
+                if (LWJGLXHelper.attrRecreateDisplay) {
                     newCurrentWindow(GLFW.glfwCreateWindow(width.get(), height.get(), windowTitle,
                             GLFW.glfwGetWindowMonitor(Window.handle), NULL));
                 } else {
@@ -986,13 +997,17 @@ public class Display {
         return displayResizable;
     }
 
-    public static void setDisplayModeAndFullscreen(DisplayMode mode) throws LWJGLException {
-        Display.mode = mode;
-        if (LWJGLXHelper.resizeRecreateDisplay) {
-            newCurrentWindow(glfwCreateWindow(mode.getWidth(), mode.getHeight(), windowTitle,
-                    mode.isFullscreenCapable() ? glfwGetPrimaryMonitor() : NULL, NULL));
+    public static void setDisplayModeAndFullscreen(DisplayMode dm) throws LWJGLException {
+        boolean fullScreenChange = (dm.isFullscreenCapable() != displayFullscreen);
+        if (dm.equals(mode) && !fullScreenChange) return;
+        boolean attrChange = dm.lwjglxAttrChange(mode) || fullScreenChange;
+        mode = dm;
+        if (LWJGLXHelper.resizeRecreateDisplay || (attrChange && LWJGLXHelper.attrRecreateDisplay)) {
+            newCurrentWindow(glfwCreateWindow(dm.getWidth(), dm.getHeight(), windowTitle,
+                    dm.isFullscreenCapable() ? glfwGetPrimaryMonitor() : NULL, NULL));
+            displayFullscreen = dm.isFullscreenCapable();
         } else {
-            GLFW.glfwSetWindowSize(Window.handle, mode.getWidth(), mode.getHeight());
+            GLFW.glfwSetWindowSize(Window.handle, dm.getWidth(), dm.getHeight());
         }
     }
 
@@ -1013,7 +1028,7 @@ public class Display {
                 glfwWindowHint(GLFW_RESIZABLE, displayResizable ? GL_TRUE : GL_FALSE);
                 glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
-                if (LWJGLXHelper.resizeRecreateDisplay) {
+                if (LWJGLXHelper.resizeRecreateDisplay || LWJGLXHelper.attrRecreateDisplay) {
                     if (fullscreen)
                         newCurrentWindow(glfwCreateWindow(width.get(), height.get(), windowTitle,
                                 glfwGetPrimaryMonitor(), NULL));

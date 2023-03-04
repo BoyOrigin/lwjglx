@@ -139,4 +139,9 @@ public final class DisplayMode {
 		sb.append("Hz");
 		return sb.toString();
 	}
+
+	boolean lwjglxAttrChange(DisplayMode obj) {
+		return obj.fullscreen != this.fullscreen ||
+				obj.freq != this.freq || obj.bpp != this.freq;
+	}
 }
