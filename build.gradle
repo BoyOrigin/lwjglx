@@ -25,9 +25,12 @@ group = 'org.lwjgl'
 version = '0.12'
 buildDir = new File(rootProject.projectDir, "build/")
 
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+	withSourcesJar()
+}
 
 sourceSets {
 	main {
