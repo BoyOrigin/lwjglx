@@ -26,6 +26,7 @@ import static org.lwjgl.system.Checks.*;
  * <li><a target="_blank" href="https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_shadow_funcs.txt">EXT_shadow_funcs</a></li>
  * </ul>
  */
+@LWJGLXReplace
 public class GL15 extends GL14 {
 
     /** New token names. */

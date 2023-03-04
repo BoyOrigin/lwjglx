@@ -33,6 +33,7 @@ import static org.lwjgl.system.MemoryUtil.*;
  * <li><a target="_blank" href="https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_texture_object.txt">EXT_texture_object</a></li>
  * </ul>
  */
+@LWJGLXReplace
 public class GL11 {
 // -- Begin LWJGL2 Bridge --
     public static void glColorPointer(int size, boolean unsigned, int stride, java.nio.ByteBuffer pointer) {

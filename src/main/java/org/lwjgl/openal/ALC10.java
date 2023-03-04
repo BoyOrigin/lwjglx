@@ -17,6 +17,7 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to ALC 1.0 functionality. */
+@LWJGLXReplace
 public class ALC10 {
 
     /** General tokens. */

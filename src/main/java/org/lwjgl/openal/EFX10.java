@@ -1,11 +1,9 @@
 package org.lwjgl.openal;
 
-import java.nio.IntBuffer;
-
-import org.lwjgl.openal.EXTEfx;
+import java.nio.*;
 
 public class EFX10 {
-	
+
 	public static final int AL_EFFECT_TYPE = EXTEfx.AL_EFFECT_TYPE;
 	public static final int AL_EFFECTSLOT_EFFECT = EXTEfx.AL_EFFECTSLOT_EFFECT;
 	public static final int AL_EFFECT_ECHO = EXTEfx.AL_EFFECT_ECHO;
@@ -60,84 +58,160 @@ public class EFX10 {
 	public static final int AL_EFFECT_AUTOWAH = EXTEfx.AL_EFFECT_AUTOWAH;
 	public static final int AL_EFFECT_COMPRESSOR = EXTEfx.AL_EFFECT_COMPRESSOR;
 	public static final int AL_EFFECT_EQUALIZER = EXTEfx.AL_EFFECT_EQUALIZER;
-	
+
 	public static int alGenAuxiliaryEffectSlots() {
 		return EXTEfx.alGenAuxiliaryEffectSlots();
 	}
-	
+
 	public static int alGenFilters() {
 		return EXTEfx.alGenFilters();
 	}
-	
+
 	public static void alDeleteFilters(int filter) {
 		EXTEfx.alDeleteFilters(filter);
 	}
-	
+
 	public static void alFilteri(int filter, int param, int value) {
 		EXTEfx.alFilteri(filter, param, value);
 	}
-	
+
 	public static void alFilterf(int filter, int param, float value) {
 		EXTEfx.alFilterf(filter, param, value);
 	}
-	
+
 	public static float alGetFilterf(int filter, int param) {
 		return EXTEfx.alGetFilterf(filter, param);
 	}
-	
+
 	public static int alGenEffects() {
 		return EXTEfx.alGenEffects();
 	}
-	
+
 	public static void alDeleteEffects(int effect) {
 		EXTEfx.alDeleteAuxiliaryEffectSlots(effect);
 	}
-	
+
 	public static void alDeleteAuxiliaryEffectSlots(int effectSlot) {
 		EXTEfx.alDeleteAuxiliaryEffectSlots(effectSlot);
 	}
-	
+
 	public static void alEffecti(int effect, int param, int value) {
 		EXTEfx.alEffecti(effect, param, value);
 	}
-	
+
 	public static float alGetEffectf(int effect, int param) {
 		return EXTEfx.alGetEffectf(effect, param);
 	}
-	
+
 	public static int alGetEffecti(int effect, int param) {
 		return EXTEfx.alGetEffecti(effect, param);
 	}
-	
+
 	public static void alEffectf(int effect, int param, float value) {
 		EXTEfx.alEffectf(effect, param, value);
 	}
-	
+
 	public static void alAuxiliaryEffectSloti(int effectSlot, int param, int value) {
 		EXTEfx.alAuxiliaryEffectSloti(effectSlot, param, value);
 	}
-	
+
 	public static void alGenAuxiliaryEffectSlots(IntBuffer effectSlots) {
 		EXTEfx.alGenAuxiliaryEffectSlots(effectSlots);
 	}
-	
+
 	public static void alGenEffects(IntBuffer effects) {
 		EXTEfx.alGenEffects(effects);
 	}
-	
+
 	public static void alDeleteEffects(IntBuffer effects) {
 		EXTEfx.alDeleteEffects(effects);
 	}
-	
+
 	public static void alDeleteAuxiliaryEffectSlots(IntBuffer effectSlots) {
 		EXTEfx.alDeleteAuxiliaryEffectSlots(effectSlots);
 	}
-	
+
 	public static void alGenFilters(IntBuffer filters) {
 		EXTEfx.alGenFilters(filters);
 	}
-	
+
 	public static void alDeleteFilters(IntBuffer filters) {
 		EXTEfx.alDeleteFilters(filters);
+	}
+
+	public static void alGetAuxiliaryEffectSlot(int var0, int var1, FloatBuffer var2) {
+		EXTEfx.alGetAuxiliaryEffectSlotfv(var0, var1, var2);
+	}
+
+	public static void alGetAuxiliaryEffectSlot(int var0, int var1, IntBuffer var2) {
+		EXTEfx.alGetAuxiliaryEffectSlotiv(var0, var1, var2);
+	}
+
+	public static float alGetAuxiliaryEffectSlotf(int var0, int var1) {
+		return EXTEfx.alGetAuxiliaryEffectSlotf(var0, var1);
+	}
+
+	public static int alGetAuxiliaryEffectSloti(int var0, int var1) {
+		return EXTEfx.alGetAuxiliaryEffectSloti(var0, var1);
+	}
+
+	public static void alEffect(int var0, int var1, FloatBuffer var2) {
+		EXTEfx.alEffectfv(var0, var1, var2);
+	}
+
+	public static void alEffect(int var0, int var1, IntBuffer var2) {
+		EXTEfx.alEffectiv(var0, var1, var2);
+	}
+
+	public static void alFilter(int var0, int var1, FloatBuffer var2) {
+		EXTEfx.alFilterfv(var0, var1, var2);
+	}
+
+	public static void alFilter(int var0, int var1, IntBuffer var2) {
+		EXTEfx.alFilteriv(var0, var1, var2);
+	}
+
+	public static void alAuxiliaryEffectSlot(int var0, int var1, FloatBuffer var2) {
+		EXTEfx.alAuxiliaryEffectSlotfv(var0, var1, var2);
+	}
+
+	public static void alAuxiliaryEffectSlot(int var0, int var1, IntBuffer var2) {
+		EXTEfx.alAuxiliaryEffectSlotiv(var0, var1, var2);
+	}
+
+	public static void alAuxiliaryEffectSlotf(int var0, int var1, float var2) {
+		EXTEfx.alAuxiliaryEffectSlotf(var0, var1, var2);
+	}
+
+	public static void alGetEffect(int var0, int var1, FloatBuffer var2) {
+		EXTEfx.alGetEffectfv(var0, var1, var2);
+	}
+
+	public static void alGetEffect(int var0, int var1, IntBuffer var2) {
+		EXTEfx.alGetEffectiv(var0, var1, var2);
+	}
+
+	public static void alGetFilter(int var0, int var1, FloatBuffer var2) {
+		EXTEfx.alGetFilterfv(var0, var1, var2);
+	}
+
+	public static void alGetFilter(int var0, int var1, IntBuffer var2) {
+		EXTEfx.alGetFilteriv(var0, var1, var2);
+	}
+
+	public static int alGetFilteri(int var0, int var1) {
+		return EXTEfx.alGetFilteri(var0, var1);
+	}
+
+	public static boolean alIsAuxiliaryEffectSlot(int var0) {
+		return EXTEfx.alIsAuxiliaryEffectSlot(var0);
+	}
+
+	public static boolean alIsEffect(int var0) {
+		return EXTEfx.alIsEffect(var0);
+	}
+
+	public static boolean alIsFilter(int var0) {
+		return EXTEfx.alIsFilter(var0);
 	}
 }

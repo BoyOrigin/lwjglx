@@ -60,8 +60,9 @@ import static org.lwjgl.system.MemoryUtil.*;
  * access (packed) arrays of struct values. Both struct and struct buffer classes may be backed by direct {@link ByteBuffer}s allocated from this class, but it
  * is highly recommended to use explicit memory management for performance.</p>
  */
+@LWJGLXReplace
 public final class BufferUtils {
-// -- Begin LWJGL2 parts --
+    // -- Begin LWJGL2 parts --
     /**
      * @return n, where buffer_element_size=2^n.
      */
@@ -81,7 +82,7 @@ public final class BufferUtils {
     /**
      * A helper function which is used to get the byte offset in an arbitrary
      * buffer based on its position
-     * 
+     *
      * @return the position of the buffer, in BYTES
      */
     public static int getOffset(Buffer buffer) {
@@ -96,12 +97,12 @@ public final class BufferUtils {
      *
      * @return the memory address
      */
-	static long getBufferAddress(Buffer buffer) {
+    static long getBufferAddress(Buffer buffer) {
         // Should be below or memAddress0() ?
         return memAddress(buffer);
     }
-// -- End LWJGL2 parts --
-    
+    // -- End LWJGL2 parts --
+
     private BufferUtils() {}
 
     /**

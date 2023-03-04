@@ -37,13 +37,13 @@ package org.lwjglx.test.opengl;
 
 import java.nio.FloatBuffer;
 
-import org.lwjglx.BufferUtils;
-import org.lwjglx.LWJGLException;
-import org.lwjglx.LWJGLUtil;
-import org.lwjglx.Sys;
-import org.lwjglx.opengl.Display;
-import org.lwjglx.opengl.DisplayMode;
-import org.lwjglx.opengl.GLContext;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLUtil;
+import org.lwjgl.Sys;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GLContext;
 
 import static org.lwjgl.opengl.ARBTransposeMatrix.*;
 import static org.lwjgl.opengl.GL11.*;

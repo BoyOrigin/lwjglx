@@ -1,12 +1,28 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
-apply plugin: 'maven'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'application'
+
+import org.gradle.internal.os.OperatingSystem
+
+switch (OperatingSystem.current()) {
+	case OperatingSystem.LINUX:
+		def osArch = System.getProperty("os.arch")
+		project.ext.lwjglNatives = osArch.startsWith("arm") || osArch.startsWith("aarch64")
+				? "natives-linux-${osArch.contains("64") || osArch.startsWith("armv8") ? "arm64" : "arm32"}"
+				: "natives-linux"
+		break
+	case OperatingSystem.MAC_OS:
+		project.ext.lwjglNatives = "natives-macos"
+		break
+	case OperatingSystem.WINDOWS:
+		def osArch = System.getProperty("os.arch")
+		project.ext.lwjglNatives = osArch.contains("64")
+				? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
+				: "natives-windows-x86"
+		break
+}
 
 group = 'org.lwjgl'
-version = '0.11'
+version = '0.12'
 buildDir = new File(rootProject.projectDir, "build/")
 
 
@@ -34,8 +50,15 @@ repositories {
 }
 
 dependencies {
-	compile 'org.lwjgl:lwjgl:3.2.3'
-	compile 'org.lwjgl:lwjgl-glfw:3.2.3'
-	compile 'org.lwjgl:lwjgl-openal:3.2.3'
-	compile 'org.lwjgl:lwjgl-opengl:3.2.3'
+	implementation platform("org.lwjgl:lwjgl-bom:3.2.3")
+
+	api "org.lwjgl:lwjgl"
+	api "org.lwjgl:lwjgl-glfw"
+	api "org.lwjgl:lwjgl-openal"
+	api "org.lwjgl:lwjgl-opengl"
+	runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
+	runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+	runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
+	runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
+	implementation  'com.google.code.findbugs:jsr305:3.0.2'
 }

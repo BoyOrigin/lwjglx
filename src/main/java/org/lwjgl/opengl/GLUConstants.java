@@ -31,56 +31,30 @@
  */
 package org.lwjgl.opengl;
 
+import static org.lwjgl.opengl.GL11.*;
+
 /**
- * Simple utility class.
+ * <p/>
+ * GLU constants.
  *
  * @author cix_foo <cix_foo@users.sourceforge.net>
  * @version $Revision$
+ * $Id$
  */
+public interface GLUConstants {
 
-public final class Util {
+    /* Errors: (return value 0 = no error) */
+    int GLU_INVALID_ENUM = 100900;
+    int GLU_INVALID_VALUE = 100901;
+    int GLU_OUT_OF_MEMORY = 100902;
+    int GLU_INCOMPATIBLE_GL_VERSION = 100903;
 
-	/** No c'tor */
-	private Util() {
-	}
+    /* StringName */
+    int GLU_VERSION = 100800;
+    int GLU_EXTENSIONS = 100801;
 
-	/**
-	 * Throws OpenGLException if glGetError() returns anything else than
-	 * GL_NO_ERROR
-	 *
-	 */
-	public static void checkGLError() throws OpenGLException {
-		int err = GL11.glGetError();
-		if (err != GL11.GL_NO_ERROR) {
-			throw new OpenGLException(err);
-		}
-	}
+    /* Boolean */
+    int GLU_TRUE = GL_TRUE;
+    int GLU_FALSE = GL_FALSE;
 
-	/**
-	 * Translate a GL error code to a String describing the error
-	 */
-	public static String translateGLErrorString(int error_code) {
-		switch (error_code) {
-		case GL11.GL_NO_ERROR:
-			return "No error";
-		case GL11.GL_INVALID_ENUM:
-			return "Invalid enum";
-		case GL11.GL_INVALID_VALUE:
-			return "Invalid value";
-		case GL11.GL_INVALID_OPERATION:
-			return "Invalid operation";
-		case GL11.GL_STACK_OVERFLOW:
-			return "Stack overflow";
-		case GL11.GL_STACK_UNDERFLOW:
-			return "Stack underflow";
-		case GL11.GL_OUT_OF_MEMORY:
-			return "Out of memory";
-		case ARBImaging.GL_TABLE_TOO_LARGE:
-			return "Table too large";
-		case GL30.GL_INVALID_FRAMEBUFFER_OPERATION:
-			return "Invalid framebuffer operation";
-		default:
-			return null;
-		}
-	}
 }

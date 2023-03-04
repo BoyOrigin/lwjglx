@@ -1,5 +1,7 @@
 package org.lwjgl.opengl;
 
+import org.lwjgl.system.LWJGLXHelper;
+
 import java.lang.reflect.Field;
 
 public class ContextCapabilities {
@@ -7,30 +9,29 @@ public class ContextCapabilities {
 	org.lwjgl.opengl.GLCapabilities cap = org.lwjgl.opengl.GL.createCapabilities();
 	
 	public ContextCapabilities() {
-		
+
 		Field[] fields = org.lwjgl.opengl.GLCapabilities.class.getFields();
-		
-		try {
-			for ( Field field : fields ) {
-				
-				String name = field.getName();
-				
-				if (name.startsWith("GL_") || name.startsWith("OpenGL")) {
-					
+
+		for (Field field : fields) {
+
+			String name = field.getName();
+
+			if (name.startsWith("GL_") || name.startsWith("OpenGL")) {
+
+				try {
 					boolean value = field.getBoolean(cap);
-					
-					try {
-						Field f = this.getClass().getField(name);
-						f.setBoolean(this, value);
-					} catch (Exception e) {
-					}
-				}
+
+					Field f = this.getClass().getField(name);
+					f.setBoolean(this, value);
+				} catch (Exception ignored) {}
 			}
-		} catch (Exception e) {
-			System.out.println(e);
+		}
+
+		if (LWJGLXHelper.assumeGlExtensions) {
+			this.GL_EXT_texture_rectangle |= this.GL_ARB_texture_rectangle;
 		}
 	}
-	
+
 	public boolean GL_AMD_blend_minmax_factor;
 	public boolean GL_AMD_conservative_depth;
 	public boolean GL_AMD_debug_output;
@@ -393,7 +394,7 @@ public class ContextCapabilities {
 	public boolean GL_SGIS_generate_mipmap;
 	public boolean GL_SGIS_texture_lod;
 	public boolean GL_SUN_slice_accum;
-	
+
 	public static void main(String[] arg) {
 		System.out.println("START!");
 		new ContextCapabilities();

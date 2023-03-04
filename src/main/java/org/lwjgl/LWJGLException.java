@@ -29,58 +29,51 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.lwjgl.opengl;
+package org.lwjgl;
 
 /**
- * Simple utility class.
+ * <p>
+ * This exception is supplied to make exception handling more generic for LWJGL
+ * specific exceptions
+ * </p>
  *
- * @author cix_foo <cix_foo@users.sourceforge.net>
+ * @author Brian Matzon <brian@matzon.dk>
  * @version $Revision$
+ * $Id$
  */
+public class LWJGLException extends Exception {
 
-public final class Util {
+    private static final long serialVersionUID = 1L;
 
-	/** No c'tor */
-	private Util() {
-	}
+    /**
+     * Plain c'tor
+     */
+    public LWJGLException() {
+        super();
+    }
 
-	/**
-	 * Throws OpenGLException if glGetError() returns anything else than
-	 * GL_NO_ERROR
-	 *
-	 */
-	public static void checkGLError() throws OpenGLException {
-		int err = GL11.glGetError();
-		if (err != GL11.GL_NO_ERROR) {
-			throw new OpenGLException(err);
-		}
-	}
+    /**
+     * Creates a new LWJGLException
+     *
+     * @param msg
+     *            String identifier for exception
+     */
+    public LWJGLException(String msg) {
+        super(msg);
+    }
 
-	/**
-	 * Translate a GL error code to a String describing the error
-	 */
-	public static String translateGLErrorString(int error_code) {
-		switch (error_code) {
-		case GL11.GL_NO_ERROR:
-			return "No error";
-		case GL11.GL_INVALID_ENUM:
-			return "Invalid enum";
-		case GL11.GL_INVALID_VALUE:
-			return "Invalid value";
-		case GL11.GL_INVALID_OPERATION:
-			return "Invalid operation";
-		case GL11.GL_STACK_OVERFLOW:
-			return "Stack overflow";
-		case GL11.GL_STACK_UNDERFLOW:
-			return "Stack underflow";
-		case GL11.GL_OUT_OF_MEMORY:
-			return "Out of memory";
-		case ARBImaging.GL_TABLE_TOO_LARGE:
-			return "Table too large";
-		case GL30.GL_INVALID_FRAMEBUFFER_OPERATION:
-			return "Invalid framebuffer operation";
-		default:
-			return null;
-		}
-	}
+    /**
+     * @param message
+     * @param cause
+     */
+    public LWJGLException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * @param cause
+     */
+    public LWJGLException(Throwable cause) {
+        super(cause);
+    }
 }

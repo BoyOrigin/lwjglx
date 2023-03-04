@@ -17,6 +17,7 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 /** Native bindings to AL 1.0 functionality. */
+@LWJGLXReplace
 public class AL10 {
 // -- Begin LWJGL2 Bridge --
     public static void alGetDouble(int p1, DoubleBuffer p2) {

@@ -33,6 +33,8 @@ package org.lwjgl.opengl;
 
 import org.lwjgl.LWJGLException;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Spasi
  */
@@ -45,9 +47,12 @@ import org.lwjgl.LWJGLException;
  * @author Spasi
  */
 public final class SharedDrawable extends DrawableGL {
-
-    public SharedDrawable(final Drawable drawable) throws LWJGLException {
-        this.context = (ContextGL)((DrawableLWJGL)drawable).createSharedContext();
+    public SharedDrawable(@Nullable final Drawable drawable) throws LWJGLException {
+        if (drawable != null) {
+            this.context = (ContextGL)((DrawableLWJGL)drawable).createSharedContext();
+        } else {
+            this.context = (ContextGL)((DrawableLWJGL)Display.getDrawable()).createSharedContext();
+        }
     }
 
     public ContextGL createSharedContext() {
@@ -55,4 +60,8 @@ public final class SharedDrawable extends DrawableGL {
         // throw new UnsupportedOperationException();
     }
 
+    @Override
+    public void makeCurrent() throws LWJGLException {
+        //stub
+    }
 }

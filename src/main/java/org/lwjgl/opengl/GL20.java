@@ -12,6 +12,7 @@ import java.nio.*;
 import org.lwjgl.*;
 
 import org.lwjgl.system.*;
+import org.lwjgl.system.MemoryUtil;
 
 import static org.lwjgl.system.Checks.*;
 
@@ -30,6 +31,7 @@ import static org.lwjgl.system.Checks.*;
  * <li><a target="_blank" href="https://www.khronos.org/registry/OpenGL/extensions/ATI/ATI_separate_stencil.txt">ATI_separate_stencil</a> and <a target="_blank" href="https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_stencil_two_side.txt">EXT_stencil_two_side</a></li>
  * </ul>
  */
+@LWJGLXReplace
 public class GL20 extends GL15 {
 
     /** Accepted by the {@code name} parameter of GetString. */
