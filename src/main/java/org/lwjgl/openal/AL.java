@@ -9,8 +9,10 @@ import org.lwjgl.MemoryUtil;
 import org.lwjgl.system.*;
 
 import javax.annotation.*;
+import java.lang.reflect.Constructor;
 import java.nio.*;
 import java.util.*;
+import java.util.function.IntFunction;
 
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.EXTThreadLocalContext.*;
@@ -260,11 +262,26 @@ public final class AL {
     /**
      * Creates a new {@link ALCapabilities} instance for the OpenAL context that is current in the current thread or process.
      *
+     * <p>This method calls {@link #setCurrentProcess} (or {@link #setCurrentThread} if applicable) with the new instance before returning.</p>
+     *
      * @param alcCaps the {@link ALCCapabilities} of the device associated with the current context
      *
      * @return the ALCapabilities instance
      */
     public static ALCapabilities createCapabilities(ALCCapabilities alcCaps) {
+        return createCapabilities(alcCaps, null);
+    }
+
+    /**
+     * Creates a new {@link ALCapabilities} instance for the OpenAL context that is current in the current thread or process.
+     *
+     * @param alcCaps       the {@link ALCCapabilities} of the device associated with the current context
+     * @param bufferFactory a function that allocates a {@link PointerBuffer} given a size. The buffer must be filled with zeroes. If {@code null}, LWJGL will
+     *                      allocate a GC-managed buffer internally.
+     *
+     * @return the ALCapabilities instance
+     */
+    public static ALCapabilities createCapabilities(ALCCapabilities alcCaps, @Nullable IntFunction<PointerBuffer> bufferFactory) {
         FunctionProvider functionProvider = ALC.check(AL.functionProvider);
 
         ALCapabilities caps = null;
@@ -322,7 +339,19 @@ public final class AL {
                 supportedExtensions.add("ALC_EXT_EFX");
             }
 
-            return caps = new ALCapabilities(functionProvider, supportedExtensions);
+            try {
+                return caps = new ALCapabilities(functionProvider, supportedExtensions,
+                        bufferFactory == null ? BufferUtils::createPointerBuffer : bufferFactory);
+            } catch (IncompatibleClassChangeError incompatibleClassChangeError) {
+                try { // LWJGL 3.2.X uses this constructor instead
+                    @SuppressWarnings("JavaReflectionMemberAccess")
+                    Constructor<ALCapabilities> constructor =
+                            ALCapabilities.class.getConstructor(FunctionProvider.class, Set.class);
+                    return constructor.newInstance(functionProvider, supportedExtensions);
+                } catch (ReflectiveOperationException e) {
+                    throw incompatibleClassChangeError;
+                }
+            }
         } finally {
             if (alcCaps.ALC_EXT_thread_local_context && alcGetThreadContext() != NULL) {
                 setCurrentThread(caps);
