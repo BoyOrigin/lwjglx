@@ -347,6 +347,9 @@ public final class AL {
                     @SuppressWarnings("JavaReflectionMemberAccess")
                     Constructor<ALCapabilities> constructor =
                             ALCapabilities.class.getConstructor(FunctionProvider.class, Set.class);
+                    try {
+                        constructor.setAccessible(true);
+                    } catch (SecurityException ignored) {}
                     return constructor.newInstance(functionProvider, supportedExtensions);
                 } catch (ReflectiveOperationException e) {
                     throw incompatibleClassChangeError;

@@ -22,7 +22,7 @@ switch (OperatingSystem.current()) {
 }
 
 group = 'org.lwjgl'
-version = '0.16'
+version = '0.17'
 buildDir = new File(rootProject.projectDir, "build/")
 
 java {
