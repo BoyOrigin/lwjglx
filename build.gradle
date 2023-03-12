@@ -22,7 +22,7 @@ switch (OperatingSystem.current()) {
 }
 
 group = 'org.lwjgl'
-version = '0.17'
+version = '0.18'
 buildDir = new File(rootProject.projectDir, "build/")
 
 java {
@@ -30,6 +30,13 @@ java {
 	targetCompatibility = JavaVersion.VERSION_1_8
 
 	withSourcesJar()
+}
+
+tasks.withType(JavaCompile) {
+	// If building with JDK 9+, we need additional flags to generate compatible bytecode
+	if (JavaVersion.current() > JavaVersion.VERSION_1_8) {
+		options.compilerArgs.addAll(Arrays.asList("--release", "8"))
+	}
 }
 
 repositories {
