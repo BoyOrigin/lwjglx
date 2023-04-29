@@ -954,10 +954,11 @@ public class Display {
     }
 
     public static int setIcon(java.nio.ByteBuffer[] icons) {
+        if (LWJGLXHelper.disableWindowIcon) return 0;
         // TODO
         try {
             if (Window.handle == MemoryUtil.NULL) {
-                Display.icons = new GLFWImage.Buffer(icons[1]);
+                Display.icons = new GLFWImage.Buffer(icons[0]);
             } else {
                 lwjglxSetWindowIcon(new GLFWImage.Buffer(icons[0]));
             }

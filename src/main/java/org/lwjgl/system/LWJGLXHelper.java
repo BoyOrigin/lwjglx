@@ -28,8 +28,13 @@ public class LWJGLXHelper {
         if (property == null || property.isEmpty())
             property = System.getenv("LWJGLX_" + key
                     .toUpperCase(Locale.ROOT).replace('-', '_'));
-        return property == null || property.isEmpty() ?
-                def : Boolean.parseBoolean(property.toLowerCase(Locale.ROOT));
+        return property == null || property.isEmpty() ? def :
+                parseProperty(property.toLowerCase(Locale.ROOT));
+    }
+
+    private static boolean parseProperty(String property) {
+        return "1".equals(property) || Boolean.parseBoolean(
+                property.toLowerCase(Locale.ROOT));
     }
 
     public static ByteBuffer getBuffer(CustomBuffer<?> customBuffer) {
