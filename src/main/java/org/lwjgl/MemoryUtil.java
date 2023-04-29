@@ -51,8 +51,8 @@ public final class MemoryUtil {
     private static final Charset utf8;
 
     static {
-        ascii = Charset.forName("ISO-8859-1");
-        utf8 = Charset.forName("UTF-8");
+        ascii = StandardCharsets.ISO_8859_1;
+        utf8 = StandardCharsets.UTF_8;
     }
 
     private MemoryUtil() {

@@ -13,7 +13,6 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.LWJGLUtil;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.LWJGLXHelper;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.LWJGLException;
@@ -424,8 +423,9 @@ public class Display {
         Mouse.create();
         Keyboard.create();
 
-        if (icons != null && parent == null)
-            glfwSetWindowIcon(Window.handle, icons);
+        if (icons != null && parent == null) {
+            lwjglxSetWindowIcon(Display.icons);
+        }
         display_impl = new DisplayImplementation() {
 
             @Override
@@ -937,7 +937,7 @@ public class Display {
     }
 
     public static boolean isCloseRequested() {
-        return glfwWindowShouldClose(Window.handle) == true;
+        return Window.handle != MemoryUtil.NULL && glfwWindowShouldClose(Window.handle);
     }
 
     public static boolean isDirty() {
@@ -959,7 +959,7 @@ public class Display {
             if (Window.handle == MemoryUtil.NULL) {
                 Display.icons = new GLFWImage.Buffer(icons[1]);
             } else {
-                glfwSetWindowIcon(Window.handle, new GLFWImage.Buffer(icons[0]));
+                lwjglxSetWindowIcon(new GLFWImage.Buffer(icons[0]));
             }
         } catch (NullPointerException e) {
             LWJGLUtil.log("Couldn't set icon");
@@ -1108,6 +1108,14 @@ public class Display {
 
         glfwSwapInterval(0);
         glfwShowWindow(Window.handle);
+    }
+
+    private static void lwjglxSetWindowIcon(GLFWImage.Buffer icons) {
+        if (LWJGLXHelper.disableWindowIcon) return;
+        if (icons.address() != MemoryUtil.NULL &&
+                icons.width() != 0 && icons.height() != 0) {
+            glfwSetWindowIcon(Window.handle, icons);
+        }
     }
 
     static class Window {
