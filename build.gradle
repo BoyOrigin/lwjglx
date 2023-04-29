@@ -22,7 +22,7 @@ switch (OperatingSystem.current()) {
 }
 
 group = 'org.lwjgl'
-version = '0.20'
+version = '0.21'
 buildDir = new File(rootProject.projectDir, "build/")
 
 java {
@@ -48,7 +48,7 @@ dependencies {
 
 	api "org.lwjgl:lwjgl"
 	api "org.lwjgl:lwjgl-glfw"
-	api "org.lwjgl:lwjgl-jawt"
+	// api "org.lwjgl:lwjgl-jawt"
 	api "org.lwjgl:lwjgl-openal"
 	api "org.lwjgl:lwjgl-opengl"
 	runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
