@@ -39,8 +39,8 @@ import java.nio.FloatBuffer;
  * Holds a 2x2 matrix
  *
  * @author cix_foo <cix_foo@users.sourceforge.net>
- * @version $Revision: 3799 $
- * $Id: Matrix2f.java 3799 2012-09-12 11:29:40Z kappa1 $
+ * @version $Revision$
+ * $Id$
  */
 
 public class Matrix2f extends Matrix implements Serializable {

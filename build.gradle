@@ -22,7 +22,7 @@ switch (OperatingSystem.current()) {
 }
 
 group = 'org.lwjgl'
-version = '0.21'
+version = '0.22'
 buildDir = new File(rootProject.projectDir, "build/")
 
 java {
@@ -44,18 +44,21 @@ repositories {
 }
 
 dependencies {
-	implementation platform("org.lwjgl:lwjgl-bom:3.3.1")
+	implementation platform("org.lwjgl:lwjgl-bom:3.3.2")
 
 	api "org.lwjgl:lwjgl"
 	api "org.lwjgl:lwjgl-glfw"
 	// api "org.lwjgl:lwjgl-jawt"
 	api "org.lwjgl:lwjgl-openal"
 	api "org.lwjgl:lwjgl-opengl"
+	api "org.lwjgl:lwjgl-stb"
 	runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
 	runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
 	runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
 	runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
 	implementation  'com.google.code.findbugs:jsr305:3.0.2'
+	implementation "net.java.jinput:jinput:2.0.9"
+	implementation("org.apache.commons:commons-lang3:3.0")
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
@@ -63,17 +66,4 @@ dependencies {
 
 test {
 	useJUnitPlatform()
-}
-
-afterEvaluate {
-	publishing {
-		publications {
-			release(MavenPublication) {
-				from components.java
-				groupId = 'com.github.Fox2Code'
-				artifactId = 'lwjglx'
-				version = '1.0' // JitPack only work with "1.0" as version here.
-			}
-		}
-	}
 }
